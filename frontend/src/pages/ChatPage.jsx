@@ -166,72 +166,125 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 h-screen flex flex-col">
-      <div className="bg-white rounded-lg shadow-lg flex-1 flex flex-col">
-        <div className="border-b p-4">
-          <h1 className="text-2xl font-bold text-gray-900">Travel Chat</h1>
+    <div className="max-w-6xl mx-auto px-4 py-8 h-screen flex flex-col">
+      <div className="card flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-2xl">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+              <span className="text-xl">🤖</span>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold">AI Travel Assistant</h1>
+              <p className="text-blue-100">Ask me anything about travel planning!</p>
+            </div>
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50">
           {messages.length === 0 ? (
-            <div className="text-center text-gray-500 mt-8">
-              <div className="text-4xl mb-4">🤖</div>
-              <p>Start a conversation about your travel plans!</p>
-              <p className="text-sm mt-2">
-                Ask me anything about destinations, activities, or planning
-                tips.
+            <div className="text-center mt-16">
+              <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                <span className="text-4xl">✈️</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Plan Your Adventure?</h3>
+              <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                Ask me about destinations, activities, travel tips, or let me help you create a personalized itinerary!
               </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+                <div className="card p-4 text-center">
+                  <div className="text-2xl mb-2">🗺️</div>
+                  <p className="text-sm font-medium">Destination Ideas</p>
+                </div>
+                <div className="card p-4 text-center">
+                  <div className="text-2xl mb-2">🍽️</div>
+                  <p className="text-sm font-medium">Food & Dining</p>
+                </div>
+                <div className="card p-4 text-center">
+                  <div className="text-2xl mb-2">🎯</div>
+                  <p className="text-sm font-medium">Activity Planning</p>
+                </div>
+              </div>
             </div>
           ) : (
-            messages.map((message) => (
+            messages.map((message, index) => (
               <div
                 key={message.id}
                 className={`flex ${
                   message.role === "user" ? "justify-end" : "justify-start"
-                }`}
+                } animate-fade-in`}
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div
-                  className={`max-w-full lg:max-w-3xl px-4 py-2 rounded-lg ${
-                    message.role === "user"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-800"
+                  className={`max-w-full lg:max-w-4xl ${
+                    message.role === "user" ? "order-2" : "order-1"
                   }`}
                 >
-                  {message.role === "assistant" &&
-                  isItineraryResponse(message.content) ? (
-                    <ItineraryDisplay content={message.content} />
-                  ) : (
-                    <div className="whitespace-pre-wrap">{message.content}</div>
+                  {message.role === "assistant" && (
+                    <div className="flex items-center space-x-2 mb-2">
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                        <span className="text-sm">🤖</span>
+                      </div>
+                      <span className="text-sm font-medium text-gray-600">AI Assistant</span>
+                    </div>
                   )}
+                  
                   <div
-                    className={`text-xs mt-1 ${
+                    className={`px-6 py-4 rounded-2xl shadow-lg ${
                       message.role === "user"
-                        ? "text-blue-100"
-                        : "text-gray-500"
+                        ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white ml-12"
+                        : "bg-white text-gray-800 border border-gray-200 mr-12"
+                    }`}
+                  >
+                    {message.role === "assistant" &&
+                    isItineraryResponse(message.content) ? (
+                      <ItineraryDisplay content={message.content} />
+                    ) : (
+                      <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
+                    )}
+                  </div>
+                  
+                  <div
+                    className={`text-xs mt-2 ${
+                      message.role === "user" ? "text-right text-gray-500 mr-12" : "text-gray-500 ml-12"
                     }`}
                   >
                     {new Date(message.created_at).toLocaleTimeString()}
                   </div>
                 </div>
+                
+                {message.role === "user" && (
+                  <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center ml-3 order-1">
+                    <span className="text-sm">👤</span>
+                  </div>
+                )}
               </div>
             ))
           )}
+          
           {loading && (
-            <div className="flex justify-start">
-              <div className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-                <div className="flex items-center space-x-2">
-                  <div className="animate-pulse">Thinking...</div>
+            <div className="flex justify-start animate-fade-in">
+              <div className="flex items-center space-x-2 mb-2">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                  <span className="text-sm">🤖</span>
+                </div>
+                <span className="text-sm font-medium text-gray-600">AI Assistant</span>
+              </div>
+              <div className="bg-white text-gray-800 px-6 py-4 rounded-2xl shadow-lg border border-gray-200 mr-12">
+                <div className="flex items-center space-x-3">
                   <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
                     <div
-                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
                       style={{ animationDelay: "0.1s" }}
                     ></div>
                     <div
-                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
                       style={{ animationDelay: "0.2s" }}
                     ></div>
                   </div>
+                  <span className="text-gray-600">Thinking...</span>
                 </div>
               </div>
             </div>
@@ -239,25 +292,40 @@ export default function ChatPage() {
           <div ref={messagesEndRef} />
         </div>
 
-        <form onSubmit={handleSendMessage} className="border-t p-4">
-          <div className="flex space-x-4">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Ask about travel plans, destinations, or get recommendations..."
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={loading}
-            />
+        {/* Input */}
+        <div className="border-t bg-white p-6">
+          <form onSubmit={handleSendMessage} className="flex space-x-4">
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Ask about travel plans, destinations, or get recommendations..."
+                className="w-full px-6 py-4 pr-12 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
+                disabled={loading}
+              />
+              <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+              </div>
+            </div>
             <button
               type="submit"
               disabled={loading || !newMessage.trim()}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed px-8"
             >
-              Send
+              {loading ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              ) : (
+                <div className="flex items-center">
+                  <span className="mr-2">📤</span>
+                  Send
+                </div>
+              )}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
