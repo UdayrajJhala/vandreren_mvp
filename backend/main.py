@@ -205,8 +205,10 @@ Guidelines:
 3. Include specific locations, times, and estimated costs
 4. Consider weather, local events, and practical logistics
 5. Adapt suggestions based on user feedback
+The response should be in JSON format only, no additional text. in the message field add the things like "Here is your itinerary" or "Sure, I've updated your itinerary" based on the context.
 6. For JSON responses, use this format:
 {{
+  "message": "string",
   "itinerary": {{
     "destination": "string",
     "duration": "X days",
@@ -236,13 +238,21 @@ Guidelines:
             travel_style=user_preferences.get("travel_style", "balanced"),
             dietary_restrictions=user_preferences.get("dietary_restrictions", []),
             budget_preference=user_preferences.get("budget_preference", "mid-range"),
-            accommodation_type=user_preferences.get("accommodation_type", "hotel")
+            accommodation_type=user_preferences.get("accommodation_type", "hotel"),
         )
 
         if trip_context:
             base_prompt += f"\n\nCurrent Trip Context: {trip_context}"
 
         return base_prompt
+
+    def extract_json(self, text):
+        """Extract JSON from response text"""
+        start = text.find("{")
+        end = text.rfind("}") + 1
+        if start != -1 and end != 0:
+            return text[start:end]
+        return text
 
     async def generate_itinerary(
         self, trip_request: TripRequest, user_preferences: dict
@@ -257,12 +267,12 @@ Create a detailed travel itinerary for:
 - Number of travelers: {trip_request.travelers}
 - Special requests: {trip_request.special_requests}
 
-Please provide a structured JSON itinerary following the format specified.
+Please provide a structured JSON itinerary following the format specified. Stricly do not return anything other than the JSON object not even any text before or after the JSON. DONT ADD '''json''' or any other text.
 """
 
         try:
             response = self.model.generate_content(system_prompt + "\n\n" + user_prompt)
-            return response.text
+            return self.extract_json(response.text)
         except Exception as e:
             raise HTTPException(
                 status_code=500, detail=f"Error generating itinerary: {str(e)}"
@@ -282,7 +292,7 @@ Please provide a structured JSON itinerary following the format specified.
 
         try:
             response = self.model.generate_content(full_prompt)
-            return response.text
+            return self.extract_json(response.text)
         except Exception as e:
             raise HTTPException(
                 status_code=500, detail=f"Error generating response: {str(e)}"

@@ -90,11 +90,56 @@ export default function ItineraryPage() {
           <h2 className="text-xl font-bold text-gray-900 mb-4">
             Itinerary Details
           </h2>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <pre className="whitespace-pre-wrap text-sm text-gray-800 font-mono">
-              {itinerary.itinerary_data}
-            </pre>
-          </div>
+          {itinerary.itinerary_data && (
+            <div className="grid grid-cols-1 gap-6">
+              {JSON.parse(itinerary.itinerary_data).itinerary.days.map((day) => (
+                <div key={day.day} className="bg-white p-6 rounded-lg shadow-md border">
+                  <div className="flex justify-between items-center mb-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900">Day {day.day}</h3>
+                      <p className="text-gray-600">{day.date}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-medium text-indigo-600">{day.theme}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {day.activities.map((activity, index) => (
+                      <div key={index} className="border-l-4 border-indigo-500 pl-4 py-2">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex justify-between">
+                              <p className="font-semibold text-gray-900">{activity.time}</p>
+                              <p className="text-sm font-medium text-gray-900">${activity.cost}</p>
+                            </div>
+                            <p className="font-medium text-gray-800">{activity.activity}</p>
+                            <p className="text-sm text-gray-600">{activity.location}</p>
+                            <p className="text-sm text-gray-500 mt-1">{activity.duration}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-4 pt-4 border-t flex justify-between items-center">
+                    <p className="text-sm text-gray-500">
+                      Activities: {day.activities.length}
+                    </p>
+                    <p className="text-sm font-medium text-gray-900">
+                      Daily Total: ${day.activities.reduce((sum, act) => sum + act.cost, 0)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              
+              <div className="bg-indigo-50 p-4 rounded-lg">
+                <p className="text-center font-medium text-indigo-900">
+                  Total Estimated Cost: ${JSON.parse(itinerary.itinerary_data).itinerary.total_estimated_cost}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="border-t pt-6">
