@@ -9,9 +9,8 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 import google.generativeai as genai
 import json
-import jwt
+import jwt  # Fixed import
 from passlib.context import CryptContext
-from passlib.hash import bcrypt
 import os
 from dotenv import load_dotenv
 import httpx
@@ -27,7 +26,8 @@ ALGORITHM = "HS256"
 
 # Initialize services
 genai.configure(api_key=GEMINI_API_KEY)
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Fixed bcrypt configuration
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__rounds=12)
 
 # Database setup
 SQLALCHEMY_DATABASE_URL = "sqlite:///./vandreren.db"
@@ -187,7 +187,7 @@ def get_current_user(
 # Gemini Integration Class
 class GeminiTravelAgent:
     def __init__(self):
-        self.model = genai.GenerativeModel("gemini-pro")
+        self.model = genai.GenerativeModel("gemini-2.5-flash")
 
     def create_system_prompt(self, user_preferences: dict, trip_context: dict = None):
         base_prompt = """You are Vandreren, an AI travel planning assistant. You help users create personalized travel itineraries.
@@ -232,7 +232,11 @@ Guidelines:
   }}
 }}
 """.format(
-            **user_preferences
+            interests=user_preferences.get("interests", []),
+            travel_style=user_preferences.get("travel_style", "balanced"),
+            dietary_restrictions=user_preferences.get("dietary_restrictions", []),
+            budget_preference=user_preferences.get("budget_preference", "mid-range"),
+            accommodation_type=user_preferences.get("accommodation_type", "hotel")
         )
 
         if trip_context:
