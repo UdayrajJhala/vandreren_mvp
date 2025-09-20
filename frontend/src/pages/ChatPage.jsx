@@ -17,41 +17,52 @@ const ItineraryDisplay = ({ content }) => {
 
     return (
       <div className="space-y-6">
-        <div className="text-lg font-medium text-gray-900 mb-4">
-          {message}
-        </div>
-        
+        <div className="text-lg font-medium text-gray-900 mb-4">{message}</div>
+
         <div className="grid grid-cols-1 gap-6 mt-4">
           {itinerary.days.map((day) => (
-            <div key={day.day} className="bg-white p-6 rounded-lg shadow border">
+            <div
+              key={day.day}
+              className="bg-white p-6 rounded-lg shadow border"
+            >
               <div className="flex justify-between items-center mb-4">
                 <div>
                   <h3 className="text-lg font-bold">Day {day.day}</h3>
                   <p className="text-gray-600">{day.date}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-gray-500">{day.theme}</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    {day.theme}
+                  </p>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 {day.activities.map((activity, index) => (
                   <div key={index} className="border-l-4 border-blue-500 pl-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <p className="font-semibold">{activity.time} - {activity.activity}</p>
-                        <p className="text-sm text-gray-600">{activity.location}</p>
-                        <p className="text-sm text-gray-500">Duration: {activity.duration}</p>
+                        <p className="font-semibold">
+                          {activity.time} - {activity.activity}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {activity.location}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Duration: {activity.duration}
+                        </p>
                         <p className="text-sm mt-1">{activity.description}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900">${activity.cost}</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          ${activity.cost}
+                        </p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              
+
               <div className="mt-4 pt-4 border-t">
                 <p className="text-sm text-gray-500 text-right">
                   Daily activities: {day.activities.length}
@@ -59,7 +70,7 @@ const ItineraryDisplay = ({ content }) => {
               </div>
             </div>
           ))}
-          
+
           <div className="bg-blue-50 p-4 rounded-lg mt-4">
             <p className="text-center font-medium text-blue-900">
               Total Estimated Cost: ${itinerary.total_estimated_cost}
@@ -186,7 +197,8 @@ export default function ChatPage() {
                       : "bg-gray-200 text-gray-800"
                   }`}
                 >
-                  {message.role === "assistant" && isItineraryResponse(message.content) ? (
+                  {message.role === "assistant" &&
+                  isItineraryResponse(message.content) ? (
                     <ItineraryDisplay content={message.content} />
                   ) : (
                     <div className="whitespace-pre-wrap">{message.content}</div>
