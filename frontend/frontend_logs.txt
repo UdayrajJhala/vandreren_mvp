@@ -1,0 +1,420 @@
+2025-08-15 08:45:24.156 [INFO] main.jsx:12 - Vandreren Travel App starting up
+2025-08-15 08:45:24.234 [INFO] AuthContext.jsx:18 - AuthContext initialized
+2025-08-15 08:45:24.235 [DEBUG] AuthContext.jsx:25 - Checking for existing token in localStorage
+2025-08-15 08:45:24.236 [DEBUG] AuthContext.jsx:26 - No existing token found
+2025-08-15 08:45:24.237 [INFO] App.jsx:15 - App component mounted, no authenticated user
+2025-08-15 08:45:24.289 [INFO] Router - Navigating to /auth (no authenticated user)
+2025-08-15 08:45:24.345 [DEBUG] AuthPage.jsx:24 - AuthPage component mounted in login mode
+2025-08-15 08:45:24.346 [DEBUG] Header.jsx:12 - Header rendered for unauthenticated user
+
+2025-08-15 08:48:42.567 [DEBUG] AuthPage.jsx:67 - Form mode switched to registration
+2025-08-15 08:48:42.568 [DEBUG] AuthPage.jsx:84 - Registration form fields initialized
+2025-08-15 08:48:45.123 [INFO] AuthPage.jsx:45 - Registration form submitted
+2025-08-15 08:48:45.124 [DEBUG] AuthPage.jsx:46 - Form data: {"email":"john.traveler@email.com","username":"john_explorer","password":"[MASKED]","full_name":"John Smith"}
+2025-08-15 08:48:45.125 [DEBUG] AuthContext.jsx:34 - Attempting user registration
+2025-08-15 08:48:45.126 [DEBUG] api.js:8 - POST /auth/register - Request initiated
+2025-08-15 08:48:45.127 [DEBUG] api.js:9 - Request headers: {"Content-Type":"application/json"}
+2025-08-15 08:48:45.587 [DEBUG] api.js:12 - POST /auth/register - Response received (200)
+2025-08-15 08:48:45.588 [INFO] AuthContext.jsx:42 - Registration successful
+2025-08-15 08:48:45.589 [DEBUG] AuthContext.jsx:44 - Storing JWT token in localStorage
+2025-08-15 08:48:45.590 [DEBUG] AuthContext.jsx:45 - Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+2025-08-15 08:48:45.591 [DEBUG] AuthContext.jsx:46 - Setting Authorization header
+2025-08-15 08:48:45.592 [INFO] AuthContext.jsx:48 - User state updated: {"id":101,"username":"john_explorer","full_name":"John Smith"}
+2025-08-15 08:48:45.634 [INFO] Router - User authenticated, navigating to /dashboard
+2025-08-15 08:48:45.689 [DEBUG] Header.jsx:23 - Header rendered for authenticated user: john_explorer
+2025-08-15 08:48:45.690 [INFO] Dashboard.jsx:18 - Dashboard component mounted
+2025-08-15 08:48:45.691 [DEBUG] Dashboard.jsx:22 - Fetching user data (itineraries and conversations)
+
+2025-08-15 08:48:45.745 [DEBUG] api.js:8 - GET /itineraries - Request initiated
+2025-08-15 08:48:45.746 [DEBUG] api.js:8 - GET /conversations - Request initiated
+2025-08-15 08:48:45.801 [DEBUG] api.js:12 - GET /itineraries - Response received (200)
+2025-08-15 08:48:45.802 [DEBUG] Dashboard.jsx:27 - Itineraries received: []
+2025-08-15 08:48:45.856 [DEBUG] api.js:12 - GET /conversations - Response received (200)
+2025-08-15 08:48:45.857 [DEBUG] Dashboard.jsx:28 - Conversations received: []
+2025-08-15 08:48:45.858 [INFO] Dashboard.jsx:31 - Dashboard data loaded successfully
+
+2025-08-15 08:55:12.456 [INFO] Dashboard.jsx:54 - Create Itinerary button clicked
+2025-08-15 08:55:12.457 [DEBUG] CreateItineraryModal.jsx:15 - Modal opened
+2025-08-15 08:55:15.234 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: destination = "Tokyo, Japan"
+2025-08-15 08:55:18.123 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: start_date = "2025-09-01"
+2025-08-15 08:55:21.789 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: end_date = "2025-09-08"
+2025-08-15 08:55:24.456 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: budget = "3500"
+2025-08-15 08:55:27.123 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: travelers = "2"
+2025-08-15 08:55:33.234 [INFO] CreateItineraryModal.jsx:32 - Itinerary creation form submitted
+2025-08-15 08:55:33.235 [DEBUG] CreateItineraryModal.jsx:35 - Request data: {"destination":"Tokyo, Japan","start_date":"2025-09-01","end_date":"2025-09-08","budget":3500,"travelers":2,"special_requests":""}
+2025-08-15 08:55:33.236 [DEBUG] api.js:8 - POST /itinerary/create - Request initiated
+2025-08-15 08:55:33.237 [INFO] CreateItineraryModal.jsx:38 - Creating itinerary... (loading state)
+2025-08-15 08:55:36.234 [DEBUG] api.js:12 - POST /itinerary/create - Response received (200)
+2025-08-15 08:55:36.235 [INFO] CreateItineraryModal.jsx:39 - Itinerary created successfully
+2025-08-15 08:55:36.236 [DEBUG] CreateItineraryModal.jsx:40 - Response: {"itinerary_id":301,"conversation_id":201,"itinerary":"..."}
+2025-08-15 08:55:36.237 [INFO] Dashboard.jsx:47 - Refreshing dashboard data after itinerary creation
+2025-08-15 08:55:36.289 [DEBUG] Dashboard.jsx:22 - Re-fetching user data
+
+2025-08-15 08:55:36.345 [DEBUG] api.js:8 - GET /itineraries - Request initiated
+2025-08-15 08:55:36.346 [DEBUG] api.js:8 - GET /conversations - Request initiated
+2025-08-15 08:55:36.398 [DEBUG] api.js:12 - GET /itineraries - Response received (200)
+2025-08-15 08:55:36.399 [DEBUG] Dashboard.jsx:27 - Itineraries received: [{"id":301,"title":"Trip to Tokyo, Japan","destination":"Tokyo, Japan","start_date":"2025-09-01","end_date":"2025-09-08","budget":3500}]
+2025-08-15 08:55:36.456 [DEBUG] api.js:12 - GET /conversations - Response received (200)
+2025-08-15 08:55:36.457 [DEBUG] Dashboard.jsx:28 - Conversations received: [{"id":201,"title":"Trip to Tokyo, Japan"}]
+2025-08-15 08:55:36.458 [INFO] Dashboard.jsx:31 - Dashboard data refreshed successfully
+
+2025-08-15 08:58:15.123 [INFO] Router - Navigation requested to /user/preferences
+2025-08-15 08:58:15.124 [DEBUG] ProfilePage.jsx:24 - ProfilePage component mounted
+2025-08-15 08:58:15.125 [DEBUG] ProfilePage.jsx:28 - Fetching user preferences
+2025-08-15 08:58:15.126 [DEBUG] api.js:8 - GET /user/preferences - Request initiated
+2025-08-15 08:58:17.345 [DEBUG] api.js:12 - GET /user/preferences - Response received (200)
+2025-08-15 08:58:17.346 [DEBUG] ProfilePage.jsx:32 - Preferences received: {"interests":["museums","food","history"],"travel_style":"balanced","budget_preference":"mid-range"}
+2025-08-15 08:58:17.347 [INFO] ProfilePage.jsx:38 - User preferences loaded successfully
+2025-08-15 08:58:17.348 [DEBUG] ProfilePage.jsx:45 - Form data populated from preferences
+
+2025-08-15 09:01:23.456 [INFO] Router - Navigation requested to /chat/201
+2025-08-15 09:01:23.457 [DEBUG] ChatPage.jsx:18 - ChatPage component mounted with conversation_id: 201
+2025-08-15 09:01:23.458 [DEBUG] ChatPage.jsx:23 - Fetching conversation messages
+2025-08-15 09:01:23.459 [DEBUG] api.js:8 - GET /conversation/201/messages - Request initiated
+2025-08-15 09:01:23.523 [DEBUG] api.js:12 - GET /conversation/201/messages - Response received (200)
+2025-08-15 09:01:23.524 [DEBUG] ChatPage.jsx:27 - Messages received: [{"id":1,"content":"Plan a trip to Tokyo, Japan...","role":"user"},{"id":2,"content":"I'd be happy to help you plan...","role":"assistant"}]
+2025-08-15 09:01:23.525 [INFO] ChatPage.jsx:30 - Chat messages loaded successfully
+2025-08-15 09:01:23.578 [DEBUG] ChatPage.jsx:35 - Scrolling to bottom of chat
+
+2025-08-15 09:01:35.234 [DEBUG] ChatPage.jsx:87 - New message input: "Can you add more traditional Japanese experiences to my Tokyo itinerary?"
+2025-08-15 09:01:42.456 [INFO] ChatPage.jsx:52 - Sending new chat message
+2025-08-15 09:01:42.457 [DEBUG] ChatPage.jsx:58 - Message content: "Can you add more traditional Japanese experiences to my Tokyo itinerary? I'm particularly interested in tea ceremonies and temple visits."
+2025-08-15 09:01:42.458 [DEBUG] ChatPage.jsx:62 - Adding user message to UI immediately
+2025-08-15 09:01:42.459 [DEBUG] api.js:8 - POST /chat - Request initiated
+2025-08-15 09:01:42.460 [INFO] ChatPage.jsx:65 - Chat message sending... (loading state)
+2025-08-15 09:01:44.345 [DEBUG] api.js:12 - POST /chat - Response received (200)
+2025-08-15 09:01:44.346 [DEBUG] ChatPage.jsx:68 - Chat response received: {"conversation_id":201,"response":"I'd be delighted to help you add more traditional Japanese experiences..."}
+2025-08-15 09:01:44.347 [DEBUG] ChatPage.jsx:72 - Adding AI response to UI
+2025-08-15 09:01:44.348 [INFO] ChatPage.jsx:78 - Chat message exchange completed
+2025-08-15 09:01:44.398 [DEBUG] ChatPage.jsx:35 - Scrolling to bottom of chat
+
+2025-08-15 09:05:12.567 [INFO] Router - Navigation requested to /auth
+2025-08-15 09:05:12.568 [DEBUG] Header.jsx:32 - Logout button clicked
+2025-08-15 09:05:12.569 [INFO] AuthContext.jsx:67 - User logout initiated
+2025-08-15 09:05:12.570 [DEBUG] AuthContext.jsx:68 - Removing token from localStorage
+2025-08-15 09:05:12.571 [DEBUG] AuthContext.jsx:69 - Clearing Authorization header
+2025-08-15 09:05:12.572 [INFO] AuthContext.jsx:71 - User logged out successfully
+2025-08-15 09:05:12.623 [INFO] Router - User logged out, redirecting to /auth
+2025-08-15 09:05:12.678 [DEBUG] AuthPage.jsx:24 - AuthPage component mounted in login mode
+
+2025-08-15 09:05:18.234 [DEBUG] AuthPage.jsx:84 - Login form field updated: username = "adventure_sarah"
+2025-08-15 09:05:21.345 [DEBUG] AuthPage.jsx:84 - Login form field updated: password = "[MASKED]"
+2025-08-15 09:05:21.789 [INFO] AuthPage.jsx:45 - Registration form submitted (new user registration)
+2025-08-15 09:05:21.790 [DEBUG] AuthPage.jsx:46 - Form data: {"email":"sarah.wanderer@gmail.com","username":"adventure_sarah","password":"[MASKED]","full_name":"Sarah Thompson"}
+2025-08-15 09:05:21.791 [DEBUG] AuthContext.jsx:34 - Attempting user registration
+2025-08-15 09:05:21.792 [DEBUG] api.js:8 - POST /auth/register - Request initiated
+2025-08-15 09:05:21.856 [DEBUG] api.js:12 - POST /auth/register - Response received (200)
+2025-08-15 09:05:21.857 [INFO] AuthContext.jsx:42 - Registration successful
+2025-08-15 09:05:21.858 [DEBUG] AuthContext.jsx:44 - Storing JWT token in localStorage
+2025-08-15 09:05:21.859 [INFO] AuthContext.jsx:48 - User state updated: {"id":102,"username":"adventure_sarah","full_name":"Sarah Thompson"}
+2025-08-15 09:05:21.912 [INFO] Router - User authenticated, navigating to /dashboard
+2025-08-15 09:05:21.967 [DEBUG] Header.jsx:23 - Header rendered for authenticated user: adventure_sarah
+2025-08-15 09:05:21.968 [INFO] Dashboard.jsx:18 - Dashboard component mounted
+
+2025-08-15 09:08:33.456 [INFO] Dashboard.jsx:58 - Chat with AI button clicked
+2025-08-15 09:08:33.457 [INFO] Router - Navigation requested to /chat
+2025-08-15 09:08:33.512 [DEBUG] ChatPage.jsx:18 - ChatPage component mounted with no conversation_id (new chat)
+2025-08-15 09:08:33.513 [INFO] ChatPage.jsx:21 - New chat session starting
+2025-08-15 09:08:40.234 [DEBUG] ChatPage.jsx:87 - New message input: "Hi! I want to plan a budget-friendly adventure trip to New Zealand."
+2025-08-15 09:08:45.567 [INFO] ChatPage.jsx:52 - Sending new chat message (new conversation)
+2025-08-15 09:08:45.568 [DEBUG] ChatPage.jsx:58 - Message content: "Hi! I want to plan a budget-friendly adventure trip to New Zealand. I love hiking and outdoor photography."
+2025-08-15 09:08:45.569 [DEBUG] ChatPage.jsx:62 - Adding user message to UI immediately
+2025-08-15 09:08:45.570 [DEBUG] api.js:8 - POST /chat - Request initiated
+2025-08-15 09:08:45.571 [DEBUG] api.js:9 - Request payload: {"message":"Hi! I want to plan...","conversation_id":null}
+2025-08-15 09:08:45.572 [INFO] ChatPage.jsx:65 - Chat message sending... (loading state)
+2025-08-15 09:08:47.345 [DEBUG] api.js:12 - POST /chat - Response received (200)
+2025-08-15 09:08:47.346 [DEBUG] ChatPage.jsx:68 - Chat response received: {"conversation_id":202,"response":"Hello! I'm excited to help you plan..."}
+2025-08-15 09:08:47.347 [DEBUG] ChatPage.jsx:74 - Setting conversation_id: 202 (new conversation created)
+2025-08-15 09:08:47.348 [DEBUG] ChatPage.jsx:72 - Adding AI response to UI
+2025-08-15 09:08:47.349 [INFO] ChatPage.jsx:78 - Chat message exchange completed
+2025-08-15 09:08:47.401 [DEBUG] ChatPage.jsx:35 - Scrolling to bottom of chat
+
+2025-08-15 09:12:15.234 [INFO] Router - Navigation requested to /itinerary/301
+2025-08-15 09:12:15.235 [ERROR] Router - Access denied: Itinerary 301 does not belong to current user (adventure_sarah)
+2025-08-15 09:12:15.236 [DEBUG] ItineraryPage.jsx:21 - Attempting to fetch itinerary 301
+2025-08-15 09:12:15.237 [DEBUG] api.js:8 - GET /itinerary/301 - Request initiated
+2025-08-15 09:12:15.634 [DEBUG] api.js:12 - GET /itinerary/301 - Response received (404)
+2025-08-15 09:12:15.635 [ERROR] ItineraryPage.jsx:25 - Failed to load itinerary: Itinerary not found
+2025-08-15 09:12:15.636 [INFO] ItineraryPage.jsx:28 - Displaying error message to user
+
+2025-08-15 09:15:45.567 [INFO] Router - Navigation requested to /dashboard
+2025-08-15 08:45:24.156 [INFO] main.jsx:12 - Vandreren Travel App starting up
+2025-08-15 08:45:24.234 [INFO] AuthContext.jsx:18 - AuthContext initialized
+2025-08-15 08:45:24.235 [DEBUG] AuthContext.jsx:25 - Checking for existing token in localStorage
+2025-08-15 08:45:24.236 [DEBUG] AuthContext.jsx:26 - No existing token found
+2025-08-15 08:45:24.237 [INFO] App.jsx:15 - App component mounted, no authenticated user
+2025-08-15 08:45:24.289 [INFO] Router - Navigating to /auth (no authenticated user)
+2025-08-15 08:45:24.345 [DEBUG] AuthPage.jsx:24 - AuthPage component mounted in login mode
+2025-08-15 08:45:24.346 [DEBUG] Header.jsx:12 - Header rendered for unauthenticated user
+
+2025-08-15 08:48:42.567 [DEBUG] AuthPage.jsx:67 - Form mode switched to registration
+2025-08-15 08:48:42.568 [DEBUG] AuthPage.jsx:84 - Registration form fields initialized
+2025-08-15 08:48:45.123 [INFO] AuthPage.jsx:45 - Registration form submitted
+2025-08-15 08:48:45.124 [DEBUG] AuthPage.jsx:46 - Form data: {"email":"john.traveler@email.com","username":"john_explorer","password":"[MASKED]","full_name":"John Smith"}
+2025-08-15 08:48:45.125 [DEBUG] AuthContext.jsx:34 - Attempting user registration
+2025-08-15 08:48:45.126 [DEBUG] api.js:8 - POST /auth/register - Request initiated
+2025-08-15 08:48:45.127 [DEBUG] api.js:9 - Request headers: {"Content-Type":"application/json"}
+2025-08-15 08:48:45.587 [DEBUG] api.js:12 - POST /auth/register - Response received (200)
+2025-08-15 08:48:45.588 [INFO] AuthContext.jsx:42 - Registration successful
+2025-08-15 08:48:45.589 [DEBUG] AuthContext.jsx:44 - Storing JWT token in localStorage
+2025-08-15 08:48:45.590 [DEBUG] AuthContext.jsx:45 - Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+2025-08-15 08:48:45.591 [DEBUG] AuthContext.jsx:46 - Setting Authorization header
+2025-08-15 08:48:45.592 [INFO] AuthContext.jsx:48 - User state updated: {"id":101,"username":"john_explorer","full_name":"John Smith"}
+2025-08-15 08:48:45.634 [INFO] Router - User authenticated, navigating to /dashboard
+2025-08-15 08:48:45.689 [DEBUG] Header.jsx:23 - Header rendered for authenticated user: john_explorer
+2025-08-15 08:48:45.690 [INFO] Dashboard.jsx:18 - Dashboard component mounted
+2025-08-15 08:48:45.691 [DEBUG] Dashboard.jsx:22 - Fetching user data (itineraries and conversations)
+
+2025-08-15 08:48:45.745 [DEBUG] api.js:8 - GET /itineraries - Request initiated
+2025-08-15 08:48:45.746 [DEBUG] api.js:8 - GET /conversations - Request initiated
+2025-08-15 08:48:45.801 [DEBUG] api.js:12 - GET /itineraries - Response received (200)
+2025-08-15 08:48:45.802 [DEBUG] Dashboard.jsx:27 - Itineraries received: []
+2025-08-15 08:48:45.856 [DEBUG] api.js:12 - GET /conversations - Response received (200)
+2025-08-15 08:48:45.857 [DEBUG] Dashboard.jsx:28 - Conversations received: []
+2025-08-15 08:48:45.858 [INFO] Dashboard.jsx:31 - Dashboard data loaded successfully
+
+2025-08-15 08:55:12.456 [INFO] Dashboard.jsx:54 - Create Itinerary button clicked
+2025-08-15 08:55:12.457 [DEBUG] CreateItineraryModal.jsx:15 - Modal opened
+2025-08-15 08:55:15.234 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: destination = "Tokyo, Japan"
+2025-08-15 08:55:18.123 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: start_date = "2025-09-01"
+2025-08-15 08:55:21.789 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: end_date = "2025-09-08"
+2025-08-15 08:55:24.456 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: budget = "3500"
+2025-08-15 08:55:27.123 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: travelers = "2"
+2025-08-15 08:55:33.234 [INFO] CreateItineraryModal.jsx:32 - Itinerary creation form submitted
+2025-08-15 08:55:33.235 [DEBUG] CreateItineraryModal.jsx:35 - Request data: {"destination":"Tokyo, Japan","start_date":"2025-09-01","end_date":"2025-09-08","budget":3500,"travelers":2,"special_requests":""}
+2025-08-15 08:55:33.236 [DEBUG] api.js:8 - POST /itinerary/create - Request initiated
+2025-08-15 08:55:33.237 [INFO] CreateItineraryModal.jsx:38 - Creating itinerary... (loading state)
+2025-08-15 08:55:36.234 [DEBUG] api.js:12 - POST /itinerary/create - Response received (200)
+2025-08-15 08:55:36.235 [INFO] CreateItineraryModal.jsx:39 - Itinerary created successfully
+2025-08-15 08:55:36.236 [DEBUG] CreateItineraryModal.jsx:40 - Response: {"itinerary_id":301,"conversation_id":201,"itinerary":"..."}
+2025-08-15 08:55:36.237 [INFO] Dashboard.jsx:47 - Refreshing dashboard data after itinerary creation
+2025-08-15 08:55:36.289 [DEBUG] Dashboard.jsx:22 - Re-fetching user data
+
+2025-08-15 08:55:36.345 [DEBUG] api.js:8 - GET /itineraries - Request initiated
+2025-08-15 08:55:36.346 [DEBUG] api.js:8 - GET /conversations - Request initiated
+2025-08-15 08:55:36.398 [DEBUG] api.js:12 - GET /itineraries - Response received (200)
+2025-08-15 08:55:36.399 [DEBUG] Dashboard.jsx:27 - Itineraries received: [{"id":301,"title":"Trip to Tokyo, Japan","destination":"Tokyo, Japan","start_date":"2025-09-01","end_date":"2025-09-08","budget":3500}]
+2025-08-15 08:55:36.456 [DEBUG] api.js:12 - GET /conversations - Response received (200)
+2025-08-15 08:55:36.457 [DEBUG] Dashboard.jsx:28 - Conversations received: [{"id":201,"title":"Trip to Tokyo, Japan"}]
+2025-08-15 08:55:36.458 [INFO] Dashboard.jsx:31 - Dashboard data refreshed successfully
+
+2025-08-15 08:58:15.123 [INFO] Router - Navigation requested to /user/preferences
+2025-08-15 08:58:15.124 [DEBUG] ProfilePage.jsx:24 - ProfilePage component mounted
+2025-08-15 08:58:15.125 [DEBUG] ProfilePage.jsx:28 - Fetching user preferences
+2025-08-15 08:58:15.126 [DEBUG] api.js:8 - GET /user/preferences - Request initiated
+2025-08-15 08:58:17.345 [DEBUG] api.js:12 - GET /user/preferences - Response received (200)
+2025-08-15 08:58:17.346 [DEBUG] ProfilePage.jsx:32 - Preferences received: {"interests":["museums","food","history"],"travel_style":"balanced","budget_preference":"mid-range"}
+2025-08-15 08:58:17.347 [INFO] ProfilePage.jsx:38 - User preferences loaded successfully
+2025-08-15 08:58:17.348 [DEBUG] ProfilePage.jsx:45 - Form data populated from preferences
+
+2025-08-15 09:01:23.456 [INFO] Router - Navigation requested to /chat/201
+2025-08-15 09:01:23.457 [DEBUG] ChatPage.jsx:18 - ChatPage component mounted with conversation_id: 201
+2025-08-15 09:01:23.458 [DEBUG] ChatPage.jsx:23 - Fetching conversation messages
+2025-08-15 09:01:23.459 [DEBUG] api.js:8 - GET /conversation/201/messages - Request initiated
+2025-08-15 09:01:23.523 [DEBUG] api.js:12 - GET /conversation/201/messages - Response received (200)
+2025-08-15 09:01:23.524 [DEBUG] ChatPage.jsx:27 - Messages received: [{"id":1,"content":"Plan a trip to Tokyo, Japan...","role":"user"},{"id":2,"content":"I'd be happy to help you plan...","role":"assistant"}]
+2025-08-15 09:01:23.525 [INFO] ChatPage.jsx:30 - Chat messages loaded successfully
+2025-08-15 09:01:23.578 [DEBUG] ChatPage.jsx:35 - Scrolling to bottom of chat
+
+2025-08-15 09:01:35.234 [DEBUG] ChatPage.jsx:87 - New message input: "Can you add more traditional Japanese experiences to my Tokyo itinerary?"
+2025-08-15 09:01:42.456 [INFO] ChatPage.jsx:52 - Sending new chat message
+2025-08-15 09:01:42.457 [DEBUG] ChatPage.jsx:58 - Message content: "Can you add more traditional Japanese experiences to my Tokyo itinerary? I'm particularly interested in tea ceremonies and temple visits."
+2025-08-15 09:01:42.458 [DEBUG] ChatPage.jsx:62 - Adding user message to UI immediately
+2025-08-15 09:01:42.459 [DEBUG] api.js:8 - POST /chat - Request initiated
+2025-08-15 09:01:42.460 [INFO] ChatPage.jsx:65 - Chat message sending... (loading state)
+2025-08-15 09:01:44.345 [DEBUG] api.js:12 - POST /chat - Response received (200)
+2025-08-15 09:01:44.346 [DEBUG] ChatPage.jsx:68 - Chat response received: {"conversation_id":201,"response":"I'd be delighted to help you add more traditional Japanese experiences..."}
+2025-08-15 09:01:44.347 [DEBUG] ChatPage.jsx:72 - Adding AI response to UI
+2025-08-15 09:01:44.348 [INFO] ChatPage.jsx:78 - Chat message exchange completed
+2025-08-15 09:01:44.398 [DEBUG] ChatPage.jsx:35 - Scrolling to bottom of chat
+
+2025-08-15 09:05:12.567 [INFO] Router - Navigation requested to /auth
+2025-08-15 09:05:12.568 [DEBUG] Header.jsx:32 - Logout button clicked
+2025-08-15 09:05:12.569 [INFO] AuthContext.jsx:67 - User logout initiated
+2025-08-15 09:05:12.570 [DEBUG] AuthContext.jsx:68 - Removing token from localStorage
+2025-08-15 09:05:12.571 [DEBUG] AuthContext.jsx:69 - Clearing Authorization header
+2025-08-15 09:05:12.572 [INFO] AuthContext.jsx:71 - User logged out successfully
+2025-08-15 09:05:12.623 [INFO] Router - User logged out, redirecting to /auth
+2025-08-15 09:05:12.678 [DEBUG] AuthPage.jsx:24 - AuthPage component mounted in login mode
+
+2025-08-15 09:05:18.234 [DEBUG] AuthPage.jsx:84 - Login form field updated: username = "adventure_sarah"
+2025-08-15 09:05:21.345 [DEBUG] AuthPage.jsx:84 - Login form field updated: password = "[MASKED]"
+2025-08-15 09:05:21.789 [INFO] AuthPage.jsx:45 - Registration form submitted (new user registration)
+2025-08-15 09:05:21.790 [DEBUG] AuthPage.jsx:46 - Form data: {"email":"sarah.wanderer@gmail.com","username":"adventure_sarah","password":"[MASKED]","full_name":"Sarah Thompson"}
+2025-08-15 09:05:21.791 [DEBUG] AuthContext.jsx:34 - Attempting user registration
+2025-08-15 09:05:21.792 [DEBUG] api.js:8 - POST /auth/register - Request initiated
+2025-08-15 09:05:21.856 [DEBUG] api.js:12 - POST /auth/register - Response received (200)
+2025-08-15 09:05:21.857 [INFO] AuthContext.jsx:42 - Registration successful
+2025-08-15 09:05:21.858 [DEBUG] AuthContext.jsx:44 - Storing JWT token in localStorage
+2025-08-15 09:05:21.859 [INFO] AuthContext.jsx:48 - User state updated: {"id":102,"username":"adventure_sarah","full_name":"Sarah Thompson"}
+2025-08-15 09:05:21.912 [INFO] Router - User authenticated, navigating to /dashboard
+2025-08-15 09:05:21.967 [DEBUG] Header.jsx:23 - Header rendered for authenticated user: adventure_sarah
+2025-08-15 09:05:21.968 [INFO] Dashboard.jsx:18 - Dashboard component mounted
+
+2025-08-15 09:08:33.456 [INFO] Dashboard.jsx:58 - Chat with AI button clicked
+2025-08-15 09:08:33.457 [INFO] Router - Navigation requested to /chat
+2025-08-15 09:08:33.512 [DEBUG] ChatPage.jsx:18 - ChatPage component mounted with no conversation_id (new chat)
+2025-08-15 09:08:33.513 [INFO] ChatPage.jsx:21 - New chat session starting
+2025-08-15 09:08:40.234 [DEBUG] ChatPage.jsx:87 - New message input: "Hi! I want to plan a budget-friendly adventure trip to New Zealand."
+2025-08-15 09:08:45.567 [INFO] ChatPage.jsx:52 - Sending new chat message (new conversation)
+2025-08-15 09:08:45.568 [DEBUG] ChatPage.jsx:58 - Message content: "Hi! I want to plan a budget-friendly adventure trip to New Zealand. I love hiking and outdoor photography."
+2025-08-15 09:08:45.569 [DEBUG] ChatPage.jsx:62 - Adding user message to UI immediately
+2025-08-15 09:08:45.570 [DEBUG] api.js:8 - POST /chat - Request initiated
+2025-08-15 09:08:45.571 [DEBUG] api.js:9 - Request payload: {"message":"Hi! I want to plan...","conversation_id":null}
+2025-08-15 09:08:45.572 [INFO] ChatPage.jsx:65 - Chat message sending... (loading state)
+2025-08-15 09:08:47.345 [DEBUG] api.js:12 - POST /chat - Response received (200)
+2025-08-15 09:08:47.346 [DEBUG] ChatPage.jsx:68 - Chat response received: {"conversation_id":202,"response":"Hello! I'm excited to help you plan..."}
+2025-08-15 09:08:47.347 [DEBUG] ChatPage.jsx:74 - Setting conversation_id: 202 (new conversation created)
+2025-08-15 09:08:47.348 [DEBUG] ChatPage.jsx:72 - Adding AI response to UI
+2025-08-15 09:08:47.349 [INFO] ChatPage.jsx:78 - Chat message exchange completed
+2025-08-15 09:08:47.401 [DEBUG] ChatPage.jsx:35 - Scrolling to bottom of chat
+
+2025-08-15 09:12:15.234 [INFO] Router - Navigation requested to /itinerary/301
+2025-08-15 09:12:15.235 [ERROR] Router - Access denied: Itinerary 301 does not belong to current user (adventure_sarah)
+2025-08-15 09:12:15.236 [DEBUG] ItineraryPage.jsx:21 - Attempting to fetch itinerary 301
+2025-08-15 09:12:15.237 [DEBUG] api.js:8 - GET /itinerary/301 - Request initiated
+2025-08-15 09:12:15.634 [DEBUG] api.js:12 - GET /itinerary/301 - Response received (404)
+2025-08-15 09:12:15.635 [ERROR] ItineraryPage.jsx:25 - Failed to load itinerary: Itinerary not found
+2025-08-15 09:12:15.636 [INFO] ItineraryPage.jsx:28 - Displaying error message to user
+
+2025-08-15 09:15:45.567 [INFO] Router - Navigation requested to /dashboard
+2025-08-15 08:45:24.156 [INFO] main.jsx:12 - Vandreren Travel App starting up
+2025-08-15 08:45:24.234 [INFO] AuthContext.jsx:18 - AuthContext initialized
+2025-08-15 08:45:24.235 [DEBUG] AuthContext.jsx:25 - Checking for existing token in localStorage
+2025-08-15 08:45:24.236 [DEBUG] AuthContext.jsx:26 - No existing token found
+2025-08-15 08:45:24.237 [INFO] App.jsx:15 - App component mounted, no authenticated user
+2025-08-15 08:45:24.289 [INFO] Router - Navigating to /auth (no authenticated user)
+2025-08-15 08:45:24.345 [DEBUG] AuthPage.jsx:24 - AuthPage component mounted in login mode
+2025-08-15 08:45:24.346 [DEBUG] Header.jsx:12 - Header rendered for unauthenticated user
+
+2025-08-15 08:48:42.567 [DEBUG] AuthPage.jsx:67 - Form mode switched to registration
+2025-08-15 08:48:42.568 [DEBUG] AuthPage.jsx:84 - Registration form fields initialized
+2025-08-15 08:48:45.123 [INFO] AuthPage.jsx:45 - Registration form submitted
+2025-08-15 08:48:45.124 [DEBUG] AuthPage.jsx:46 - Form data: {"email":"john.traveler@email.com","username":"john_explorer","password":"[MASKED]","full_name":"John Smith"}
+2025-08-15 08:48:45.125 [DEBUG] AuthContext.jsx:34 - Attempting user registration
+2025-08-15 08:48:45.126 [DEBUG] api.js:8 - POST /auth/register - Request initiated
+2025-08-15 08:48:45.127 [DEBUG] api.js:9 - Request headers: {"Content-Type":"application/json"}
+2025-08-15 08:48:45.587 [DEBUG] api.js:12 - POST /auth/register - Response received (200)
+2025-08-15 08:48:45.588 [INFO] AuthContext.jsx:42 - Registration successful
+2025-08-15 08:48:45.589 [DEBUG] AuthContext.jsx:44 - Storing JWT token in localStorage
+2025-08-15 08:48:45.590 [DEBUG] AuthContext.jsx:45 - Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+2025-08-15 08:48:45.591 [DEBUG] AuthContext.jsx:46 - Setting Authorization header
+2025-08-15 08:48:45.592 [INFO] AuthContext.jsx:48 - User state updated: {"id":101,"username":"john_explorer","full_name":"John Smith"}
+2025-08-15 08:48:45.634 [INFO] Router - User authenticated, navigating to /dashboard
+2025-08-15 08:48:45.689 [DEBUG] Header.jsx:23 - Header rendered for authenticated user: john_explorer
+2025-08-15 08:48:45.690 [INFO] Dashboard.jsx:18 - Dashboard component mounted
+2025-08-15 08:48:45.691 [DEBUG] Dashboard.jsx:22 - Fetching user data (itineraries and conversations)
+
+2025-08-15 08:48:45.745 [DEBUG] api.js:8 - GET /itineraries - Request initiated
+2025-08-15 08:48:45.746 [DEBUG] api.js:8 - GET /conversations - Request initiated
+2025-08-15 08:48:45.801 [DEBUG] api.js:12 - GET /itineraries - Response received (200)
+2025-08-15 08:48:45.802 [DEBUG] Dashboard.jsx:27 - Itineraries received: []
+2025-08-15 08:48:45.856 [DEBUG] api.js:12 - GET /conversations - Response received (200)
+2025-08-15 08:48:45.857 [DEBUG] Dashboard.jsx:28 - Conversations received: []
+2025-08-15 08:48:45.858 [INFO] Dashboard.jsx:31 - Dashboard data loaded successfully
+
+2025-08-15 08:55:12.456 [INFO] Dashboard.jsx:54 - Create Itinerary button clicked
+2025-08-15 08:55:12.457 [DEBUG] CreateItineraryModal.jsx:15 - Modal opened
+2025-08-15 08:55:15.234 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: destination = "Tokyo, Japan"
+2025-08-15 08:55:18.123 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: start_date = "2025-09-01"
+2025-08-15 08:55:21.789 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: end_date = "2025-09-08"
+2025-08-15 08:55:24.456 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: budget = "3500"
+2025-08-15 08:55:27.123 [DEBUG] CreateItineraryModal.jsx:67 - Form field updated: travelers = "2"
+2025-08-15 08:55:33.234 [INFO] CreateItineraryModal.jsx:32 - Itinerary creation form submitted
+2025-08-15 08:55:33.235 [DEBUG] CreateItineraryModal.jsx:35 - Request data: {"destination":"Tokyo, Japan","start_date":"2025-09-01","end_date":"2025-09-08","budget":3500,"travelers":2,"special_requests":""}
+2025-08-15 08:55:33.236 [DEBUG] api.js:8 - POST /itinerary/create - Request initiated
+2025-08-15 08:55:33.237 [INFO] CreateItineraryModal.jsx:38 - Creating itinerary... (loading state)
+2025-08-15 08:55:36.234 [DEBUG] api.js:12 - POST /itinerary/create - Response received (200)
+2025-08-15 08:55:36.235 [INFO] CreateItineraryModal.jsx:39 - Itinerary created successfully
+2025-08-15 08:55:36.236 [DEBUG] CreateItineraryModal.jsx:40 - Response: {"itinerary_id":301,"conversation_id":201,"itinerary":"..."}
+2025-08-15 08:55:36.237 [INFO] Dashboard.jsx:47 - Refreshing dashboard data after itinerary creation
+2025-08-15 08:55:36.289 [DEBUG] Dashboard.jsx:22 - Re-fetching user data
+
+2025-08-15 08:55:36.345 [DEBUG] api.js:8 - GET /itineraries - Request initiated
+2025-08-15 08:55:36.346 [DEBUG] api.js:8 - GET /conversations - Request initiated
+2025-08-15 08:55:36.398 [DEBUG] api.js:12 - GET /itineraries - Response received (200)
+2025-08-15 08:55:36.399 [DEBUG] Dashboard.jsx:27 - Itineraries received: [{"id":301,"title":"Trip to Tokyo, Japan","destination":"Tokyo, Japan","start_date":"2025-09-01","end_date":"2025-09-08","budget":3500}]
+2025-08-15 08:55:36.456 [DEBUG] api.js:12 - GET /conversations - Response received (200)
+2025-08-15 08:55:36.457 [DEBUG] Dashboard.jsx:28 - Conversations received: [{"id":201,"title":"Trip to Tokyo, Japan"}]
+2025-08-15 08:55:36.458 [INFO] Dashboard.jsx:31 - Dashboard data refreshed successfully
+
+2025-08-15 08:58:15.123 [INFO] Router - Navigation requested to /user/preferences
+2025-08-15 08:58:15.124 [DEBUG] ProfilePage.jsx:24 - ProfilePage component mounted
+2025-08-15 08:58:15.125 [DEBUG] ProfilePage.jsx:28 - Fetching user preferences
+2025-08-15 08:58:15.126 [DEBUG] api.js:8 - GET /user/preferences - Request initiated
+2025-08-15 08:58:17.345 [DEBUG] api.js:12 - GET /user/preferences - Response received (200)
+2025-08-15 08:58:17.346 [DEBUG] ProfilePage.jsx:32 - Preferences received: {"interests":["museums","food","history"],"travel_style":"balanced","budget_preference":"mid-range"}
+2025-08-15 08:58:17.347 [INFO] ProfilePage.jsx:38 - User preferences loaded successfully
+2025-08-15 08:58:17.348 [DEBUG] ProfilePage.jsx:45 - Form data populated from preferences
+
+2025-08-15 09:01:23.456 [INFO] Router - Navigation requested to /chat/201
+2025-08-15 09:01:23.457 [DEBUG] ChatPage.jsx:18 - ChatPage component mounted with conversation_id: 201
+2025-08-15 09:01:23.458 [DEBUG] ChatPage.jsx:23 - Fetching conversation messages
+2025-08-15 09:01:23.459 [DEBUG] api.js:8 - GET /conversation/201/messages - Request initiated
+2025-08-15 09:01:23.523 [DEBUG] api.js:12 - GET /conversation/201/messages - Response received (200)
+2025-08-15 09:01:23.524 [DEBUG] ChatPage.jsx:27 - Messages received: [{"id":1,"content":"Plan a trip to Tokyo, Japan...","role":"user"},{"id":2,"content":"I'd be happy to help you plan...","role":"assistant"}]
+2025-08-15 09:01:23.525 [INFO] ChatPage.jsx:30 - Chat messages loaded successfully
+2025-08-15 09:01:23.578 [DEBUG] ChatPage.jsx:35 - Scrolling to bottom of chat
+
+2025-08-15 09:01:35.234 [DEBUG] ChatPage.jsx:87 - New message input: "Can you add more traditional Japanese experiences to my Tokyo itinerary?"
+2025-08-15 09:01:42.456 [INFO] ChatPage.jsx:52 - Sending new chat message
+2025-08-15 09:01:42.457 [DEBUG] ChatPage.jsx:58 - Message content: "Can you add more traditional Japanese experiences to my Tokyo itinerary? I'm particularly interested in tea ceremonies and temple visits."
+2025-08-15 09:01:42.458 [DEBUG] ChatPage.jsx:62 - Adding user message to UI immediately
+2025-08-15 09:01:42.459 [DEBUG] api.js:8 - POST /chat - Request initiated
+2025-08-15 09:01:42.460 [INFO] ChatPage.jsx:65 - Chat message sending... (loading state)
+2025-08-15 09:01:44.345 [DEBUG] api.js:12 - POST /chat - Response received (200)
+2025-08-15 09:01:44.346 [DEBUG] ChatPage.jsx:68 - Chat response received: {"conversation_id":201,"response":"I'd be delighted to help you add more traditional Japanese experiences..."}
+2025-08-15 09:01:44.347 [DEBUG] ChatPage.jsx:72 - Adding AI response to UI
+2025-08-15 09:01:44.348 [INFO] ChatPage.jsx:78 - Chat message exchange completed
+2025-08-15 09:01:44.398 [DEBUG] ChatPage.jsx:35 - Scrolling to bottom of chat
+
+2025-08-15 09:05:12.567 [INFO] Router - Navigation requested to /auth
+2025-08-15 09:05:12.568 [DEBUG] Header.jsx:32 - Logout button clicked
+2025-08-15 09:05:12.569 [INFO] AuthContext.jsx:67 - User logout initiated
+2025-08-15 09:05:12.570 [DEBUG] AuthContext.jsx:68 - Removing token from localStorage
+2025-08-15 09:05:12.571 [DEBUG] AuthContext.jsx:69 - Clearing Authorization header
+2025-08-15 09:05:12.572 [INFO] AuthContext.jsx:71 - User logged out successfully
+2025-08-15 09:05:12.623 [INFO] Router - User logged out, redirecting to /auth
+2025-08-15 09:05:12.678 [DEBUG] AuthPage.jsx:24 - AuthPage component mounted in login mode
+
+2025-08-15 09:05:18.234 [DEBUG] AuthPage.jsx:84 - Login form field updated: username = "adventure_sarah"
+2025-08-15 09:05:21.345 [DEBUG] AuthPage.jsx:84 - Login form field updated: password = "[MASKED]"
+2025-08-15 09:05:21.789 [INFO] AuthPage.jsx:45 - Registration form submitted (new user registration)
+2025-08-15 09:05:21.790 [DEBUG] AuthPage.jsx:46 - Form data: {"email":"sarah.wanderer@gmail.com","username":"adventure_sarah","password":"[MASKED]","full_name":"Sarah Thompson"}
+2025-08-15 09:05:21.791 [DEBUG] AuthContext.jsx:34 - Attempting user registration
+2025-08-15 09:05:21.792 [DEBUG] api.js:8 - POST /auth/register - Request initiated
+2025-08-15 09:05:21.856 [DEBUG] api.js:12 - POST /auth/register - Response received (200)
+2025-08-15 09:05:21.857 [INFO] AuthContext.jsx:42 - Registration successful
+2025-08-15 09:05:21.858 [DEBUG] AuthContext.jsx:44 - Storing JWT token in localStorage
+2025-08-15 09:05:21.859 [INFO] AuthContext.jsx:48 - User state updated: {"id":102,"username":"adventure_sarah","full_name":"Sarah Thompson"}
+2025-08-15 09:05:21.912 [INFO] Router - User authenticated, navigating to /dashboard
+2025-08-15 09:05:21.967 [DEBUG] Header.jsx:23 - Header rendered for authenticated user: adventure_sarah
+2025-08-15 09:05:21.968 [INFO] Dashboard.jsx:18 - Dashboard component mounted
+
+2025-08-15 09:08:33.456 [INFO] Dashboard.jsx:58 - Chat with AI button clicked
+2025-08-15 09:08:33.457 [INFO] Router - Navigation requested to /chat
+2025-08-15 09:08:33.512 [DEBUG] ChatPage.jsx:18 - ChatPage component mounted with no conversation_id (new chat)
+2025-08-15 09:08:33.513 [INFO] ChatPage.jsx:21 - New chat session starting
+2025-08-15 09:08:40.234 [DEBUG] ChatPage.jsx:87 - New message input: "Hi! I want to plan a budget-friendly adventure trip to New Zealand."
+2025-08-15 09:08:45.567 [INFO] ChatPage.jsx:52 - Sending new chat message (new conversation)
+2025-08-15 09:08:45.568 [DEBUG] ChatPage.jsx:58 - Message content: "Hi! I want to plan a budget-friendly adventure trip to New Zealand. I love hiking and outdoor photography."
+2025-08-15 09:08:45.569 [DEBUG] ChatPage.jsx:62 - Adding user message to UI immediately
+2025-08-15 09:08:45.570 [DEBUG] api.js:8 - POST /chat - Request initiated
+2025-08-15 09:08:45.571 [DEBUG] api.js:9 - Request payload: {"message":"Hi! I want to plan...","conversation_id":null}
+2025-08-15 09:08:45.572 [INFO] ChatPage.jsx:65 - Chat message sending... (loading state)
+2025-08-15 09:08:47.345 [DEBUG] api.js:12 - POST /chat - Response received (200)
+2025-08-15 09:08:47.346 [DEBUG] ChatPage.jsx:68 - Chat response received: {"conversation_id":202,"response":"Hello! I'm excited to help you plan..."}
+2025-08-15 09:08:47.347 [DEBUG] ChatPage.jsx:74 - Setting conversation_id: 202 (new conversation created)
+2025-08-15 09:08:47.348 [DEBUG] ChatPage.jsx:72 - Adding AI response to UI
+2025-08-15 09:08:47.349 [INFO] ChatPage.jsx:78 - Chat message exchange completed
+2025-08-15 09:08:47.401 [DEBUG] ChatPage.jsx:35 - Scrolling to bottom of chat
+
+2025-08-15 09:12:15.234 [INFO] Router - Navigation requested to /itinerary/301
+2025-08-15 09:12:15.235 [ERROR] Router - Access denied: Itinerary 301 does not belong to current user (adventure_sarah)
+2025-08-15 09:12:15.236 [DEBUG] ItineraryPage.jsx:21 - Attempting to fetch itinerary 301
+2025-08-15 09:12:15.237 [DEBUG] api.js:8 - GET /itinerary/301 - Request initiated
+2025-08-15 09:12:15.634 [DEBUG] api.js:12 - GET /itinerary/301 - Response received (404)
+2025-08-15 09:12:15.635 [ERROR] ItineraryPage.jsx:25 - Failed to load itinerary: Itinerary not found
+2025-08-15 09:12:15.636 [INFO] ItineraryPage.jsx:28 - Displaying error message to user
+
+2025-08-15 09:15:45.567 [INFO] Router - Navigation requested to /dashboard
