@@ -1,0 +1,445 @@
+2025-08-15 08:45:23,123 INFO uvicorn.server: Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+2025-08-15 08:45:23,124 INFO uvicorn.server: Started reloader process [12345] using statreload
+2025-08-15 08:45:23,899 INFO uvicorn.server: Started server process [12346]
+2025-08-15 08:45:23,900 INFO uvicorn.server: Waiting for application startup.
+2025-08-15 08:45:23,901 INFO vandreren.main: Vandreren Travel API v1.0.0 starting up...
+2025-08-15 08:45:24,125 INFO vandreren.main: Database connection established
+2025-08-15 08:45:24,126 INFO vandreren.main: Gemini AI client initialized successfully
+2025-08-15 08:45:24,127 INFO uvicorn.server: Application startup complete.
+
+2025-08-15 08:48:45,234 INFO vandreren.auth: New user registration attempt for email: john.traveler@email.com
+2025-08-15 08:48:45,235 DEBUG vandreren.auth: Checking if user exists with email: john.traveler@email.com and username: john_explorer
+2025-08-15 08:48:45,298 DEBUG vandreren.database: SELECT users.id FROM users WHERE users.email = ? OR users.username = ? [('john.traveler@email.com', 'john_explorer')]
+2025-08-15 08:48:45,299 DEBUG vandreren.auth: User does not exist, proceeding with registration
+2025-08-15 08:48:45,445 DEBUG vandreren.auth: Password hashed successfully using bcrypt
+2025-08-15 08:48:45,446 INFO vandreren.auth: Creating new user with preferences: {'interests': ['museums', 'food', 'history'], 'travel_style': 'balanced', 'budget_preference': 'mid-range'}
+2025-08-15 08:48:45,512 DEBUG vandreren.database: INSERT INTO users (email, username, hashed_password, full_name, preferences, created_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-08-15 08:48:45,513 INFO vandreren.auth: User registered successfully with ID: 101
+2025-08-15 08:48:45,514 DEBUG vandreren.jwt: Generating JWT token for user: john_explorer
+2025-08-15 08:48:45,578 INFO vandreren.auth: JWT token generated with expiry: 2025-08-22 08:48:45
+2025-08-15 08:48:45,579 INFO uvicorn.access: 192.168.1.105:52341 - "POST /auth/register HTTP/1.1" 200 OK
+
+2025-08-15 08:52:15,678 INFO vandreren.auth: Login attempt for username: john_explorer
+2025-08-15 08:52:15,679 DEBUG vandreren.database: SELECT * FROM users WHERE username = ? [('john_explorer',)]
+2025-08-15 08:52:15,742 DEBUG vandreren.auth: User found, verifying password
+2025-08-15 08:52:15,856 DEBUG vandreren.auth: Password verification successful
+2025-08-15 08:52:15,857 DEBUG vandreren.jwt: Generating JWT token for user: john_explorer
+2025-08-15 08:52:15,912 INFO vandreren.auth: User logged in successfully: john_explorer
+2025-08-15 08:52:15,913 INFO uvicorn.access: 192.168.1.105:52341 - "POST /auth/login HTTP/1.1" 200 OK
+
+2025-08-15 08:55:33,445 INFO vandreren.itinerary: New itinerary creation request from user_id: 101
+2025-08-15 08:55:33,446 DEBUG vandreren.itinerary: Request details - Destination: Tokyo, Japan | Dates: 2025-09-01 to 2025-09-08 | Budget: $3500 | Travelers: 2
+2025-08-15 08:55:33,447 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 08:55:33,512 INFO vandreren.itinerary: Retrieved user preferences: {'interests': ['museums', 'food', 'history'], 'travel_style': 'balanced', 'budget_preference': 'mid-range'}
+2025-08-15 08:55:33,513 DEBUG vandreren.gemini: Preparing prompt for itinerary generation
+2025-08-15 08:55:33,514 DEBUG vandreren.gemini: System prompt generated with user preferences
+2025-08-15 08:55:33,515 INFO vandreren.gemini: Sending request to Gemini API for itinerary generation
+2025-08-15 08:55:35,789 DEBUG vandreren.gemini: Gemini API response received - 2847 characters
+2025-08-15 08:55:35,790 INFO vandreren.gemini: Itinerary generated successfully for Tokyo, Japan
+2025-08-15 08:55:35,791 DEBUG vandreren.database: INSERT INTO conversations (user_id, title, created_at) VALUES (?, ?, ?)
+2025-08-15 08:55:35,856 INFO vandreren.chat: New conversation created with ID: 201
+2025-08-15 08:55:35,857 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 08:55:35,912 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 08:55:35,967 DEBUG vandreren.database: INSERT INTO itineraries (user_id, conversation_id, title, destination, start_date, end_date, budget, itinerary_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-08-15 08:55:36,023 INFO vandreren.itinerary: Itinerary saved successfully with ID: 301
+2025-08-15 08:55:36,024 INFO uvicorn.access: 192.168.1.105:52341 - "POST /itinerary/create HTTP/1.1" 200 OK
+
+2025-08-15 08:58:17,234 INFO vandreren.profile: User preferences fetch request from user_id: 101
+2025-08-15 08:58:17,235 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 08:58:17,289 DEBUG vandreren.profile: Raw preferences retrieved: {"interests": ["museums", "food", "history"], "travel_style": "balanced", "dietary_restrictions": [], "budget_preference": "mid-range", "accommodation_type": "hotel"}
+2025-08-15 08:58:17,290 INFO vandreren.profile: Preferences retrieved successfully for user: john_explorer
+2025-08-15 08:58:17,291 INFO uvicorn.access: 192.168.1.105:52341 - "GET /user/preferences HTTP/1.1" 200 OK
+
+2025-08-15 09:01:42,567 INFO vandreren.chat: New chat message from user_id: 101, conversation_id: 201
+2025-08-15 09:01:42,568 DEBUG vandreren.chat: Message content: "Can you add more traditional Japanese experiences to my Tokyo itinerary? I'm particularly interested in tea ceremonies and temple visits."
+2025-08-15 09:01:42,569 DEBUG vandreren.database: SELECT * FROM conversations WHERE id = ? AND user_id = ? [(201, 101)]
+2025-08-15 09:01:42,623 INFO vandreren.chat: Conversation found, retrieving message history
+2025-08-15 09:01:42,624 DEBUG vandreren.database: SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at [(201,)]
+2025-08-15 09:01:42,678 DEBUG vandreren.chat: Retrieved 2 previous messages for context
+2025-08-15 09:01:42,679 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 09:01:42,734 INFO vandreren.chat: Building conversation context for Gemini
+2025-08-15 09:01:42,735 DEBUG vandreren.gemini: Preparing chat response with conversation history
+2025-08-15 09:01:42,736 INFO vandreren.gemini: Sending chat request to Gemini API
+2025-08-15 09:01:44,123 DEBUG vandreren.gemini: Gemini API chat response received - 1456 characters
+2025-08-15 09:01:44,124 INFO vandreren.gemini: Chat response generated successfully
+2025-08-15 09:01:44,125 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 09:01:44,189 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 09:01:44,245 DEBUG vandreren.database: UPDATE conversations SET updated_at = ? WHERE id = ? [(datetime.utcnow(), 201)]
+2025-08-15 09:01:44,301 INFO vandreren.chat: Chat messages saved and conversation updated
+2025-08-15 09:01:44,302 INFO uvicorn.access: 192.168.1.105:52341 - "POST /chat HTTP/1.1" 200 OK
+
+2025-08-15 09:05:21,445 INFO vandreren.auth: New user registration attempt for email: sarah.wanderer@gmail.com
+2025-08-15 09:05:21,446 DEBUG vandreren.auth: Checking if user exists with email: sarah.wanderer@gmail.com and username: adventure_sarah
+2025-08-15 09:05:21,502 DEBUG vandreren.database: SELECT users.id FROM users WHERE users.email = ? OR users.username = ? [('sarah.wanderer@gmail.com', 'adventure_sarah')]
+2025-08-15 09:05:21,503 DEBUG vandreren.auth: User does not exist, proceeding with registration
+2025-08-15 09:05:21,656 DEBUG vandreren.auth: Password hashed successfully using bcrypt
+2025-08-15 09:05:21,657 INFO vandreren.auth: Creating new user with preferences: {'interests': ['adventure', 'hiking', 'nature', 'photography'], 'travel_style': 'packed', 'budget_preference': 'budget'}
+2025-08-15 09:05:21,712 DEBUG vandreren.database: INSERT INTO users (email, username, hashed_password, full_name, preferences, created_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-08-15 09:05:21,768 INFO vandreren.auth: User registered successfully with ID: 102
+2025-08-15 09:05:21,769 DEBUG vandreren.jwt: Generating JWT token for user: adventure_sarah
+2025-08-15 09:05:21,823 INFO vandreren.auth: JWT token generated with expiry: 2025-08-22 09:05:21
+2025-08-15 09:05:21,824 INFO uvicorn.access: 192.168.1.245:43521 - "POST /auth/register HTTP/1.1" 200 OK
+
+2025-08-15 09:08:45,234 INFO vandreren.itinerary: Fetching all itineraries for user_id: 101
+2025-08-15 09:08:45,235 DEBUG vandreren.database: SELECT * FROM itineraries WHERE user_id = ? ORDER BY created_at DESC [(101,)]
+2025-08-15 09:08:45,289 INFO vandreren.itinerary: Retrieved 1 itineraries for user: john_explorer
+2025-08-15 09:08:45,290 INFO uvicorn.access: 192.168.1.105:52341 - "GET /itineraries HTTP/1.1" 200 OK
+
+2025-08-15 09:12:15,567 INFO vandreren.itinerary: Fetching specific itinerary ID: 301 for user_id: 101
+2025-08-15 09:12:15,568 DEBUG vandreren.database: SELECT * FROM itineraries WHERE id = ? AND user_id = ? [(301, 101)]
+2025-08-15 08:45:23,123 INFO uvicorn.server: Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+2025-08-15 08:45:23,124 INFO uvicorn.server: Started reloader process [12345] using statreload
+2025-08-15 08:45:23,899 INFO uvicorn.server: Started server process [12346]
+2025-08-15 08:45:23,900 INFO uvicorn.server: Waiting for application startup.
+2025-08-15 08:45:23,901 INFO vandreren.main: Vandreren Travel API v1.0.0 starting up...
+2025-08-15 08:45:24,125 INFO vandreren.main: Database connection established
+2025-08-15 08:45:24,126 INFO vandreren.main: Gemini AI client initialized successfully
+2025-08-15 08:45:24,127 INFO uvicorn.server: Application startup complete.
+
+2025-08-15 08:48:45,234 INFO vandreren.auth: New user registration attempt for email: john.traveler@email.com
+2025-08-15 08:48:45,235 DEBUG vandreren.auth: Checking if user exists with email: john.traveler@email.com and username: john_explorer
+2025-08-15 08:48:45,298 DEBUG vandreren.database: SELECT users.id FROM users WHERE users.email = ? OR users.username = ? [('john.traveler@email.com', 'john_explorer')]
+2025-08-15 08:48:45,299 DEBUG vandreren.auth: User does not exist, proceeding with registration
+2025-08-15 08:48:45,445 DEBUG vandreren.auth: Password hashed successfully using bcrypt
+2025-08-15 08:48:45,446 INFO vandreren.auth: Creating new user with preferences: {'interests': ['museums', 'food', 'history'], 'travel_style': 'balanced', 'budget_preference': 'mid-range'}
+2025-08-15 08:48:45,512 DEBUG vandreren.database: INSERT INTO users (email, username, hashed_password, full_name, preferences, created_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-08-15 08:48:45,513 INFO vandreren.auth: User registered successfully with ID: 101
+2025-08-15 08:48:45,514 DEBUG vandreren.jwt: Generating JWT token for user: john_explorer
+2025-08-15 08:48:45,578 INFO vandreren.auth: JWT token generated with expiry: 2025-08-22 08:48:45
+2025-08-15 08:48:45,579 INFO uvicorn.access: 192.168.1.105:52341 - "POST /auth/register HTTP/1.1" 200 OK
+
+2025-08-15 08:52:15,678 INFO vandreren.auth: Login attempt for username: john_explorer
+2025-08-15 08:52:15,679 DEBUG vandreren.database: SELECT * FROM users WHERE username = ? [('john_explorer',)]
+2025-08-15 08:52:15,742 DEBUG vandreren.auth: User found, verifying password
+2025-08-15 08:52:15,856 DEBUG vandreren.auth: Password verification successful
+2025-08-15 08:52:15,857 DEBUG vandreren.jwt: Generating JWT token for user: john_explorer
+2025-08-15 08:52:15,912 INFO vandreren.auth: User logged in successfully: john_explorer
+2025-08-15 08:52:15,913 INFO uvicorn.access: 192.168.1.105:52341 - "POST /auth/login HTTP/1.1" 200 OK
+
+2025-08-15 08:55:33,445 INFO vandreren.itinerary: New itinerary creation request from user_id: 101
+2025-08-15 08:55:33,446 DEBUG vandreren.itinerary: Request details - Destination: Tokyo, Japan | Dates: 2025-09-01 to 2025-09-08 | Budget: $3500 | Travelers: 2
+2025-08-15 08:55:33,447 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 08:55:33,512 INFO vandreren.itinerary: Retrieved user preferences: {'interests': ['museums', 'food', 'history'], 'travel_style': 'balanced', 'budget_preference': 'mid-range'}
+2025-08-15 08:55:33,513 DEBUG vandreren.gemini: Preparing prompt for itinerary generation
+2025-08-15 08:55:33,514 DEBUG vandreren.gemini: System prompt generated with user preferences
+2025-08-15 08:55:33,515 INFO vandreren.gemini: Sending request to Gemini API for itinerary generation
+2025-08-15 08:55:35,789 DEBUG vandreren.gemini: Gemini API response received - 2847 characters
+2025-08-15 08:55:35,790 INFO vandreren.gemini: Itinerary generated successfully for Tokyo, Japan
+2025-08-15 08:55:35,791 DEBUG vandreren.database: INSERT INTO conversations (user_id, title, created_at) VALUES (?, ?, ?)
+2025-08-15 08:55:35,856 INFO vandreren.chat: New conversation created with ID: 201
+2025-08-15 08:55:35,857 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 08:55:35,912 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 08:55:35,967 DEBUG vandreren.database: INSERT INTO itineraries (user_id, conversation_id, title, destination, start_date, end_date, budget, itinerary_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-08-15 08:55:36,023 INFO vandreren.itinerary: Itinerary saved successfully with ID: 301
+2025-08-15 08:55:36,024 INFO uvicorn.access: 192.168.1.105:52341 - "POST /itinerary/create HTTP/1.1" 200 OK
+
+2025-08-15 08:58:17,234 INFO vandreren.profile: User preferences fetch request from user_id: 101
+2025-08-15 08:58:17,235 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 08:58:17,289 DEBUG vandreren.profile: Raw preferences retrieved: {"interests": ["museums", "food", "history"], "travel_style": "balanced", "dietary_restrictions": [], "budget_preference": "mid-range", "accommodation_type": "hotel"}
+2025-08-15 08:58:17,290 INFO vandreren.profile: Preferences retrieved successfully for user: john_explorer
+2025-08-15 08:58:17,291 INFO uvicorn.access: 192.168.1.105:52341 - "GET /user/preferences HTTP/1.1" 200 OK
+
+2025-08-15 09:01:42,567 INFO vandreren.chat: New chat message from user_id: 101, conversation_id: 201
+2025-08-15 09:01:42,568 DEBUG vandreren.chat: Message content: "Can you add more traditional Japanese experiences to my Tokyo itinerary? I'm particularly interested in tea ceremonies and temple visits."
+2025-08-15 09:01:42,569 DEBUG vandreren.database: SELECT * FROM conversations WHERE id = ? AND user_id = ? [(201, 101)]
+2025-08-15 09:01:42,623 INFO vandreren.chat: Conversation found, retrieving message history
+2025-08-15 09:01:42,624 DEBUG vandreren.database: SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at [(201,)]
+2025-08-15 09:01:42,678 DEBUG vandreren.chat: Retrieved 2 previous messages for context
+2025-08-15 09:01:42,679 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 09:01:42,734 INFO vandreren.chat: Building conversation context for Gemini
+2025-08-15 09:01:42,735 DEBUG vandreren.gemini: Preparing chat response with conversation history
+2025-08-15 09:01:42,736 INFO vandreren.gemini: Sending chat request to Gemini API
+2025-08-15 09:01:44,123 DEBUG vandreren.gemini: Gemini API chat response received - 1456 characters
+2025-08-15 09:01:44,124 INFO vandreren.gemini: Chat response generated successfully
+2025-08-15 09:01:44,125 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 09:01:44,189 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 09:01:44,245 DEBUG vandreren.database: UPDATE conversations SET updated_at = ? WHERE id = ? [(datetime.utcnow(), 201)]
+2025-08-15 09:01:44,301 INFO vandreren.chat: Chat messages saved and conversation updated
+2025-08-15 09:01:44,302 INFO uvicorn.access: 192.168.1.105:52341 - "POST /chat HTTP/1.1" 200 OK
+
+2025-08-15 09:05:21,445 INFO vandreren.auth: New user registration attempt for email: sarah.wanderer@gmail.com
+2025-08-15 09:05:21,446 DEBUG vandreren.auth: Checking if user exists with email: sarah.wanderer@gmail.com and username: adventure_sarah
+2025-08-15 09:05:21,502 DEBUG vandreren.database: SELECT users.id FROM users WHERE users.email = ? OR users.username = ? [('sarah.wanderer@gmail.com', 'adventure_sarah')]
+2025-08-15 09:05:21,503 DEBUG vandreren.auth: User does not exist, proceeding with registration
+2025-08-15 09:05:21,656 DEBUG vandreren.auth: Password hashed successfully using bcrypt
+2025-08-15 09:05:21,657 INFO vandreren.auth: Creating new user with preferences: {'interests': ['adventure', 'hiking', 'nature', 'photography'], 'travel_style': 'packed', 'budget_preference': 'budget'}
+2025-08-15 09:05:21,712 DEBUG vandreren.database: INSERT INTO users (email, username, hashed_password, full_name, preferences, created_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-08-15 09:05:21,768 INFO vandreren.auth: User registered successfully with ID: 102
+2025-08-15 09:05:21,769 DEBUG vandreren.jwt: Generating JWT token for user: adventure_sarah
+2025-08-15 09:05:21,823 INFO vandreren.auth: JWT token generated with expiry: 2025-08-22 09:05:21
+2025-08-15 09:05:21,824 INFO uvicorn.access: 192.168.1.245:43521 - "POST /auth/register HTTP/1.1" 200 OK
+
+2025-08-15 09:08:45,234 INFO vandreren.itinerary: Fetching all itineraries for user_id: 101
+2025-08-15 09:08:45,235 DEBUG vandreren.database: SELECT * FROM itineraries WHERE user_id = ? ORDER BY created_at DESC [(101,)]
+2025-08-15 09:08:45,289 INFO vandreren.itinerary: Retrieved 1 itineraries for user: john_explorer
+2025-08-15 09:08:45,290 INFO uvicorn.access: 192.168.1.105:52341 - "GET /itineraries HTTP/1.1" 200 OK
+
+2025-08-15 09:12:15,567 INFO vandreren.itinerary: Fetching specific itinerary ID: 301 for user_id: 101
+2025-08-15 09:12:15,568 DEBUG vandreren.database: SELECT * FROM itineraries WHERE id = ? AND user_id = ? [(301, 101)]
+2025-08-15 08:45:23,123 INFO uvicorn.server: Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+2025-08-15 08:45:23,124 INFO uvicorn.server: Started reloader process [12345] using statreload
+2025-08-15 08:45:23,899 INFO uvicorn.server: Started server process [12346]
+2025-08-15 08:45:23,900 INFO uvicorn.server: Waiting for application startup.
+2025-08-15 08:45:23,901 INFO vandreren.main: Vandreren Travel API v1.0.0 starting up...
+2025-08-15 08:45:24,125 INFO vandreren.main: Database connection established
+2025-08-15 08:45:24,126 INFO vandreren.main: Gemini AI client initialized successfully
+2025-08-15 08:45:24,127 INFO uvicorn.server: Application startup complete.
+
+2025-08-15 08:48:45,234 INFO vandreren.auth: New user registration attempt for email: john.traveler@email.com
+2025-08-15 08:48:45,235 DEBUG vandreren.auth: Checking if user exists with email: john.traveler@email.com and username: john_explorer
+2025-08-15 08:48:45,298 DEBUG vandreren.database: SELECT users.id FROM users WHERE users.email = ? OR users.username = ? [('john.traveler@email.com', 'john_explorer')]
+2025-08-15 08:48:45,299 DEBUG vandreren.auth: User does not exist, proceeding with registration
+2025-08-15 08:48:45,445 DEBUG vandreren.auth: Password hashed successfully using bcrypt
+2025-08-15 08:48:45,446 INFO vandreren.auth: Creating new user with preferences: {'interests': ['museums', 'food', 'history'], 'travel_style': 'balanced', 'budget_preference': 'mid-range'}
+2025-08-15 08:48:45,512 DEBUG vandreren.database: INSERT INTO users (email, username, hashed_password, full_name, preferences, created_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-08-15 08:48:45,513 INFO vandreren.auth: User registered successfully with ID: 101
+2025-08-15 08:48:45,514 DEBUG vandreren.jwt: Generating JWT token for user: john_explorer
+2025-08-15 08:48:45,578 INFO vandreren.auth: JWT token generated with expiry: 2025-08-22 08:48:45
+2025-08-15 08:48:45,579 INFO uvicorn.access: 192.168.1.105:52341 - "POST /auth/register HTTP/1.1" 200 OK
+
+2025-08-15 08:52:15,678 INFO vandreren.auth: Login attempt for username: john_explorer
+2025-08-15 08:52:15,679 DEBUG vandreren.database: SELECT * FROM users WHERE username = ? [('john_explorer',)]
+2025-08-15 08:52:15,742 DEBUG vandreren.auth: User found, verifying password
+2025-08-15 08:52:15,856 DEBUG vandreren.auth: Password verification successful
+2025-08-15 08:52:15,857 DEBUG vandreren.jwt: Generating JWT token for user: john_explorer
+2025-08-15 08:52:15,912 INFO vandreren.auth: User logged in successfully: john_explorer
+2025-08-15 08:52:15,913 INFO uvicorn.access: 192.168.1.105:52341 - "POST /auth/login HTTP/1.1" 200 OK
+
+2025-08-15 08:55:33,445 INFO vandreren.itinerary: New itinerary creation request from user_id: 101
+2025-08-15 08:55:33,446 DEBUG vandreren.itinerary: Request details - Destination: Tokyo, Japan | Dates: 2025-09-01 to 2025-09-08 | Budget: $3500 | Travelers: 2
+2025-08-15 08:55:33,447 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 08:55:33,512 INFO vandreren.itinerary: Retrieved user preferences: {'interests': ['museums', 'food', 'history'], 'travel_style': 'balanced', 'budget_preference': 'mid-range'}
+2025-08-15 08:55:33,513 DEBUG vandreren.gemini: Preparing prompt for itinerary generation
+2025-08-15 08:55:33,514 DEBUG vandreren.gemini: System prompt generated with user preferences
+2025-08-15 08:55:33,515 INFO vandreren.gemini: Sending request to Gemini API for itinerary generation
+2025-08-15 08:55:35,789 DEBUG vandreren.gemini: Gemini API response received - 2847 characters
+2025-08-15 08:55:35,790 INFO vandreren.gemini: Itinerary generated successfully for Tokyo, Japan
+2025-08-15 08:55:35,791 DEBUG vandreren.database: INSERT INTO conversations (user_id, title, created_at) VALUES (?, ?, ?)
+2025-08-15 08:55:35,856 INFO vandreren.chat: New conversation created with ID: 201
+2025-08-15 08:55:35,857 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 08:55:35,912 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 08:55:35,967 DEBUG vandreren.database: INSERT INTO itineraries (user_id, conversation_id, title, destination, start_date, end_date, budget, itinerary_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-08-15 08:55:36,023 INFO vandreren.itinerary: Itinerary saved successfully with ID: 301
+2025-08-15 08:55:36,024 INFO uvicorn.access: 192.168.1.105:52341 - "POST /itinerary/create HTTP/1.1" 200 OK
+
+2025-08-15 08:58:17,234 INFO vandreren.profile: User preferences fetch request from user_id: 101
+2025-08-15 08:58:17,235 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 08:58:17,289 DEBUG vandreren.profile: Raw preferences retrieved: {"interests": ["museums", "food", "history"], "travel_style": "balanced", "dietary_restrictions": [], "budget_preference": "mid-range", "accommodation_type": "hotel"}
+2025-08-15 08:58:17,290 INFO vandreren.profile: Preferences retrieved successfully for user: john_explorer
+2025-08-15 08:58:17,291 INFO uvicorn.access: 192.168.1.105:52341 - "GET /user/preferences HTTP/1.1" 200 OK
+
+2025-08-15 09:01:42,567 INFO vandreren.chat: New chat message from user_id: 101, conversation_id: 201
+2025-08-15 09:01:42,568 DEBUG vandreren.chat: Message content: "Can you add more traditional Japanese experiences to my Tokyo itinerary? I'm particularly interested in tea ceremonies and temple visits."
+2025-08-15 09:01:42,569 DEBUG vandreren.database: SELECT * FROM conversations WHERE id = ? AND user_id = ? [(201, 101)]
+2025-08-15 09:01:42,623 INFO vandreren.chat: Conversation found, retrieving message history
+2025-08-15 09:01:42,624 DEBUG vandreren.database: SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at [(201,)]
+2025-08-15 09:01:42,678 DEBUG vandreren.chat: Retrieved 2 previous messages for context
+2025-08-15 09:01:42,679 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 09:01:42,734 INFO vandreren.chat: Building conversation context for Gemini
+2025-08-15 09:01:42,735 DEBUG vandreren.gemini: Preparing chat response with conversation history
+2025-08-15 09:01:42,736 INFO vandreren.gemini: Sending chat request to Gemini API
+2025-08-15 09:01:44,123 DEBUG vandreren.gemini: Gemini API chat response received - 1456 characters
+2025-08-15 09:01:44,124 INFO vandreren.gemini: Chat response generated successfully
+2025-08-15 09:01:44,125 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 09:01:44,189 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 09:01:44,245 DEBUG vandreren.database: UPDATE conversations SET updated_at = ? WHERE id = ? [(datetime.utcnow(), 201)]
+2025-08-15 09:01:44,301 INFO vandreren.chat: Chat messages saved and conversation updated
+2025-08-15 09:01:44,302 INFO uvicorn.access: 192.168.1.105:52341 - "POST /chat HTTP/1.1" 200 OK
+
+2025-08-15 09:05:21,445 INFO vandreren.auth: New user registration attempt for email: sarah.wanderer@gmail.com
+2025-08-15 09:05:21,446 DEBUG vandreren.auth: Checking if user exists with email: sarah.wanderer@gmail.com and username: adventure_sarah
+2025-08-15 09:05:21,502 DEBUG vandreren.database: SELECT users.id FROM users WHERE users.email = ? OR users.username = ? [('sarah.wanderer@gmail.com', 'adventure_sarah')]
+2025-08-15 09:05:21,503 DEBUG vandreren.auth: User does not exist, proceeding with registration
+2025-08-15 09:05:21,656 DEBUG vandreren.auth: Password hashed successfully using bcrypt
+2025-08-15 09:05:21,657 INFO vandreren.auth: Creating new user with preferences: {'interests': ['adventure', 'hiking', 'nature', 'photography'], 'travel_style': 'packed', 'budget_preference': 'budget'}
+2025-08-15 09:05:21,712 DEBUG vandreren.database: INSERT INTO users (email, username, hashed_password, full_name, preferences, created_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-08-15 09:05:21,768 INFO vandreren.auth: User registered successfully with ID: 102
+2025-08-15 09:05:21,769 DEBUG vandreren.jwt: Generating JWT token for user: adventure_sarah
+2025-08-15 09:05:21,823 INFO vandreren.auth: JWT token generated with expiry: 2025-08-22 09:05:21
+2025-08-15 09:05:21,824 INFO uvicorn.access: 192.168.1.245:43521 - "POST /auth/register HTTP/1.1" 200 OK
+
+2025-08-15 09:08:45,234 INFO vandreren.itinerary: Fetching all itineraries for user_id: 101
+2025-08-15 09:08:45,235 DEBUG vandreren.database: SELECT * FROM itineraries WHERE user_id = ? ORDER BY created_at DESC [(101,)]
+2025-08-15 09:08:45,289 INFO vandreren.itinerary: Retrieved 1 itineraries for user: john_explorer
+2025-08-15 09:08:45,290 INFO uvicorn.access: 192.168.1.105:52341 - "GET /itineraries HTTP/1.1" 200 OK
+
+2025-08-15 09:12:15,567 INFO vandreren.itinerary: Fetching specific itinerary ID: 301 for user_id: 101
+2025-08-15 09:12:15,568 DEBUG vandreren.database: SELECT * FROM itineraries WHERE id = ? AND user_id = ? [(301, 101)]
+2025-08-15 08:45:23,123 INFO uvicorn.server: Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+2025-08-15 08:45:23,124 INFO uvicorn.server: Started reloader process [12345] using statreload
+2025-08-15 08:45:23,899 INFO uvicorn.server: Started server process [12346]
+2025-08-15 08:45:23,900 INFO uvicorn.server: Waiting for application startup.
+2025-08-15 08:45:23,901 INFO vandreren.main: Vandreren Travel API v1.0.0 starting up...
+2025-08-15 08:45:24,125 INFO vandreren.main: Database connection established
+2025-08-15 08:45:24,126 INFO vandreren.main: Gemini AI client initialized successfully
+2025-08-15 08:45:24,127 INFO uvicorn.server: Application startup complete.
+
+2025-08-15 08:48:45,234 INFO vandreren.auth: New user registration attempt for email: john.traveler@email.com
+2025-08-15 08:48:45,235 DEBUG vandreren.auth: Checking if user exists with email: john.traveler@email.com and username: john_explorer
+2025-08-15 08:48:45,298 DEBUG vandreren.database: SELECT users.id FROM users WHERE users.email = ? OR users.username = ? [('john.traveler@email.com', 'john_explorer')]
+2025-08-15 08:48:45,299 DEBUG vandreren.auth: User does not exist, proceeding with registration
+2025-08-15 08:48:45,445 DEBUG vandreren.auth: Password hashed successfully using bcrypt
+2025-08-15 08:48:45,446 INFO vandreren.auth: Creating new user with preferences: {'interests': ['museums', 'food', 'history'], 'travel_style': 'balanced', 'budget_preference': 'mid-range'}
+2025-08-15 08:48:45,512 DEBUG vandreren.database: INSERT INTO users (email, username, hashed_password, full_name, preferences, created_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-08-15 08:48:45,513 INFO vandreren.auth: User registered successfully with ID: 101
+2025-08-15 08:48:45,514 DEBUG vandreren.jwt: Generating JWT token for user: john_explorer
+2025-08-15 08:48:45,578 INFO vandreren.auth: JWT token generated with expiry: 2025-08-22 08:48:45
+2025-08-15 08:48:45,579 INFO uvicorn.access: 192.168.1.105:52341 - "POST /auth/register HTTP/1.1" 200 OK
+
+2025-08-15 08:52:15,678 INFO vandreren.auth: Login attempt for username: john_explorer
+2025-08-15 08:52:15,679 DEBUG vandreren.database: SELECT * FROM users WHERE username = ? [('john_explorer',)]
+2025-08-15 08:52:15,742 DEBUG vandreren.auth: User found, verifying password
+2025-08-15 08:52:15,856 DEBUG vandreren.auth: Password verification successful
+2025-08-15 08:52:15,857 DEBUG vandreren.jwt: Generating JWT token for user: john_explorer
+2025-08-15 08:52:15,912 INFO vandreren.auth: User logged in successfully: john_explorer
+2025-08-15 08:52:15,913 INFO uvicorn.access: 192.168.1.105:52341 - "POST /auth/login HTTP/1.1" 200 OK
+
+2025-08-15 08:55:33,445 INFO vandreren.itinerary: New itinerary creation request from user_id: 101
+2025-08-15 08:55:33,446 DEBUG vandreren.itinerary: Request details - Destination: Tokyo, Japan | Dates: 2025-09-01 to 2025-09-08 | Budget: $3500 | Travelers: 2
+2025-08-15 08:55:33,447 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 08:55:33,512 INFO vandreren.itinerary: Retrieved user preferences: {'interests': ['museums', 'food', 'history'], 'travel_style': 'balanced', 'budget_preference': 'mid-range'}
+2025-08-15 08:55:33,513 DEBUG vandreren.gemini: Preparing prompt for itinerary generation
+2025-08-15 08:55:33,514 DEBUG vandreren.gemini: System prompt generated with user preferences
+2025-08-15 08:55:33,515 INFO vandreren.gemini: Sending request to Gemini API for itinerary generation
+2025-08-15 08:55:35,789 DEBUG vandreren.gemini: Gemini API response received - 2847 characters
+2025-08-15 08:55:35,790 INFO vandreren.gemini: Itinerary generated successfully for Tokyo, Japan
+2025-08-15 08:55:35,791 DEBUG vandreren.database: INSERT INTO conversations (user_id, title, created_at) VALUES (?, ?, ?)
+2025-08-15 08:55:35,856 INFO vandreren.chat: New conversation created with ID: 201
+2025-08-15 08:55:35,857 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 08:55:35,912 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 08:55:35,967 DEBUG vandreren.database: INSERT INTO itineraries (user_id, conversation_id, title, destination, start_date, end_date, budget, itinerary_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-08-15 08:55:36,023 INFO vandreren.itinerary: Itinerary saved successfully with ID: 301
+2025-08-15 08:55:36,024 INFO uvicorn.access: 192.168.1.105:52341 - "POST /itinerary/create HTTP/1.1" 200 OK
+
+2025-08-15 08:58:17,234 INFO vandreren.profile: User preferences fetch request from user_id: 101
+2025-08-15 08:58:17,235 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 08:58:17,289 DEBUG vandreren.profile: Raw preferences retrieved: {"interests": ["museums", "food", "history"], "travel_style": "balanced", "dietary_restrictions": [], "budget_preference": "mid-range", "accommodation_type": "hotel"}
+2025-08-15 08:58:17,290 INFO vandreren.profile: Preferences retrieved successfully for user: john_explorer
+2025-08-15 08:58:17,291 INFO uvicorn.access: 192.168.1.105:52341 - "GET /user/preferences HTTP/1.1" 200 OK
+
+2025-08-15 09:01:42,567 INFO vandreren.chat: New chat message from user_id: 101, conversation_id: 201
+2025-08-15 09:01:42,568 DEBUG vandreren.chat: Message content: "Can you add more traditional Japanese experiences to my Tokyo itinerary? I'm particularly interested in tea ceremonies and temple visits."
+2025-08-15 09:01:42,569 DEBUG vandreren.database: SELECT * FROM conversations WHERE id = ? AND user_id = ? [(201, 101)]
+2025-08-15 09:01:42,623 INFO vandreren.chat: Conversation found, retrieving message history
+2025-08-15 09:01:42,624 DEBUG vandreren.database: SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at [(201,)]
+2025-08-15 09:01:42,678 DEBUG vandreren.chat: Retrieved 2 previous messages for context
+2025-08-15 09:01:42,679 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 09:01:42,734 INFO vandreren.chat: Building conversation context for Gemini
+2025-08-15 09:01:42,735 DEBUG vandreren.gemini: Preparing chat response with conversation history
+2025-08-15 09:01:42,736 INFO vandreren.gemini: Sending chat request to Gemini API
+2025-08-15 09:01:44,123 DEBUG vandreren.gemini: Gemini API chat response received - 1456 characters
+2025-08-15 09:01:44,124 INFO vandreren.gemini: Chat response generated successfully
+2025-08-15 09:01:44,125 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 09:01:44,189 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 09:01:44,245 DEBUG vandreren.database: UPDATE conversations SET updated_at = ? WHERE id = ? [(datetime.utcnow(), 201)]
+2025-08-15 09:01:44,301 INFO vandreren.chat: Chat messages saved and conversation updated
+2025-08-15 09:01:44,302 INFO uvicorn.access: 192.168.1.105:52341 - "POST /chat HTTP/1.1" 200 OK
+
+2025-08-15 09:05:21,445 INFO vandreren.auth: New user registration attempt for email: sarah.wanderer@gmail.com
+2025-08-15 09:05:21,446 DEBUG vandreren.auth: Checking if user exists with email: sarah.wanderer@gmail.com and username: adventure_sarah
+2025-08-15 09:05:21,502 DEBUG vandreren.database: SELECT users.id FROM users WHERE users.email = ? OR users.username = ? [('sarah.wanderer@gmail.com', 'adventure_sarah')]
+2025-08-15 09:05:21,503 DEBUG vandreren.auth: User does not exist, proceeding with registration
+2025-08-15 09:05:21,656 DEBUG vandreren.auth: Password hashed successfully using bcrypt
+2025-08-15 09:05:21,657 INFO vandreren.auth: Creating new user with preferences: {'interests': ['adventure', 'hiking', 'nature', 'photography'], 'travel_style': 'packed', 'budget_preference': 'budget'}
+2025-08-15 09:05:21,712 DEBUG vandreren.database: INSERT INTO users (email, username, hashed_password, full_name, preferences, created_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-08-15 09:05:21,768 INFO vandreren.auth: User registered successfully with ID: 102
+2025-08-15 09:05:21,769 DEBUG vandreren.jwt: Generating JWT token for user: adventure_sarah
+2025-08-15 09:05:21,823 INFO vandreren.auth: JWT token generated with expiry: 2025-08-22 09:05:21
+2025-08-15 09:05:21,824 INFO uvicorn.access: 192.168.1.245:43521 - "POST /auth/register HTTP/1.1" 200 OK
+
+2025-08-15 09:08:45,234 INFO vandreren.itinerary: Fetching all itineraries for user_id: 101
+2025-08-15 09:08:45,235 DEBUG vandreren.database: SELECT * FROM itineraries WHERE user_id = ? ORDER BY created_at DESC [(101,)]
+2025-08-15 09:08:45,289 INFO vandreren.itinerary: Retrieved 1 itineraries for user: john_explorer
+2025-08-15 09:08:45,290 INFO uvicorn.access: 192.168.1.105:52341 - "GET /itineraries HTTP/1.1" 200 OK
+
+2025-08-15 09:12:15,567 INFO vandreren.itinerary: Fetching specific itinerary ID: 301 for user_id: 101
+2025-08-15 09:12:15,568 DEBUG vandreren.database: SELECT * FROM itineraries WHERE id = ? AND user_id = ? [(301, 101)]
+2025-08-15 08:45:23,123 INFO uvicorn.server: Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+2025-08-15 08:45:23,124 INFO uvicorn.server: Started reloader process [12345] using statreload
+2025-08-15 08:45:23,899 INFO uvicorn.server: Started server process [12346]
+2025-08-15 08:45:23,900 INFO uvicorn.server: Waiting for application startup.
+2025-08-15 08:45:23,901 INFO vandreren.main: Vandreren Travel API v1.0.0 starting up...
+2025-08-15 08:45:24,125 INFO vandreren.main: Database connection established
+2025-08-15 08:45:24,126 INFO vandreren.main: Gemini AI client initialized successfully
+2025-08-15 08:45:24,127 INFO uvicorn.server: Application startup complete.
+
+2025-08-15 08:48:45,234 INFO vandreren.auth: New user registration attempt for email: john.traveler@email.com
+2025-08-15 08:48:45,235 DEBUG vandreren.auth: Checking if user exists with email: john.traveler@email.com and username: john_explorer
+2025-08-15 08:48:45,298 DEBUG vandreren.database: SELECT users.id FROM users WHERE users.email = ? OR users.username = ? [('john.traveler@email.com', 'john_explorer')]
+2025-08-15 08:48:45,299 DEBUG vandreren.auth: User does not exist, proceeding with registration
+2025-08-15 08:48:45,445 DEBUG vandreren.auth: Password hashed successfully using bcrypt
+2025-08-15 08:48:45,446 INFO vandreren.auth: Creating new user with preferences: {'interests': ['museums', 'food', 'history'], 'travel_style': 'balanced', 'budget_preference': 'mid-range'}
+2025-08-15 08:48:45,512 DEBUG vandreren.database: INSERT INTO users (email, username, hashed_password, full_name, preferences, created_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-08-15 08:48:45,513 INFO vandreren.auth: User registered successfully with ID: 101
+2025-08-15 08:48:45,514 DEBUG vandreren.jwt: Generating JWT token for user: john_explorer
+2025-08-15 08:48:45,578 INFO vandreren.auth: JWT token generated with expiry: 2025-08-22 08:48:45
+2025-08-15 08:48:45,579 INFO uvicorn.access: 192.168.1.105:52341 - "POST /auth/register HTTP/1.1" 200 OK
+
+2025-08-15 08:52:15,678 INFO vandreren.auth: Login attempt for username: john_explorer
+2025-08-15 08:52:15,679 DEBUG vandreren.database: SELECT * FROM users WHERE username = ? [('john_explorer',)]
+2025-08-15 08:52:15,742 DEBUG vandreren.auth: User found, verifying password
+2025-08-15 08:52:15,856 DEBUG vandreren.auth: Password verification successful
+2025-08-15 08:52:15,857 DEBUG vandreren.jwt: Generating JWT token for user: john_explorer
+2025-08-15 08:52:15,912 INFO vandreren.auth: User logged in successfully: john_explorer
+2025-08-15 08:52:15,913 INFO uvicorn.access: 192.168.1.105:52341 - "POST /auth/login HTTP/1.1" 200 OK
+
+2025-08-15 08:55:33,445 INFO vandreren.itinerary: New itinerary creation request from user_id: 101
+2025-08-15 08:55:33,446 DEBUG vandreren.itinerary: Request details - Destination: Tokyo, Japan | Dates: 2025-09-01 to 2025-09-08 | Budget: $3500 | Travelers: 2
+2025-08-15 08:55:33,447 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 08:55:33,512 INFO vandreren.itinerary: Retrieved user preferences: {'interests': ['museums', 'food', 'history'], 'travel_style': 'balanced', 'budget_preference': 'mid-range'}
+2025-08-15 08:55:33,513 DEBUG vandreren.gemini: Preparing prompt for itinerary generation
+2025-08-15 08:55:33,514 DEBUG vandreren.gemini: System prompt generated with user preferences
+2025-08-15 08:55:33,515 INFO vandreren.gemini: Sending request to Gemini API for itinerary generation
+2025-08-15 08:55:35,789 DEBUG vandreren.gemini: Gemini API response received - 2847 characters
+2025-08-15 08:55:35,790 INFO vandreren.gemini: Itinerary generated successfully for Tokyo, Japan
+2025-08-15 08:55:35,791 DEBUG vandreren.database: INSERT INTO conversations (user_id, title, created_at) VALUES (?, ?, ?)
+2025-08-15 08:55:35,856 INFO vandreren.chat: New conversation created with ID: 201
+2025-08-15 08:55:35,857 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 08:55:35,912 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 08:55:35,967 DEBUG vandreren.database: INSERT INTO itineraries (user_id, conversation_id, title, destination, start_date, end_date, budget, itinerary_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-08-15 08:55:36,023 INFO vandreren.itinerary: Itinerary saved successfully with ID: 301
+2025-08-15 08:55:36,024 INFO uvicorn.access: 192.168.1.105:52341 - "POST /itinerary/create HTTP/1.1" 200 OK
+
+2025-08-15 08:58:17,234 INFO vandreren.profile: User preferences fetch request from user_id: 101
+2025-08-15 08:58:17,235 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 08:58:17,289 DEBUG vandreren.profile: Raw preferences retrieved: {"interests": ["museums", "food", "history"], "travel_style": "balanced", "dietary_restrictions": [], "budget_preference": "mid-range", "accommodation_type": "hotel"}
+2025-08-15 08:58:17,290 INFO vandreren.profile: Preferences retrieved successfully for user: john_explorer
+2025-08-15 08:58:17,291 INFO uvicorn.access: 192.168.1.105:52341 - "GET /user/preferences HTTP/1.1" 200 OK
+
+2025-08-15 09:01:42,567 INFO vandreren.chat: New chat message from user_id: 101, conversation_id: 201
+2025-08-15 09:01:42,568 DEBUG vandreren.chat: Message content: "Can you add more traditional Japanese experiences to my Tokyo itinerary? I'm particularly interested in tea ceremonies and temple visits."
+2025-08-15 09:01:42,569 DEBUG vandreren.database: SELECT * FROM conversations WHERE id = ? AND user_id = ? [(201, 101)]
+2025-08-15 09:01:42,623 INFO vandreren.chat: Conversation found, retrieving message history
+2025-08-15 09:01:42,624 DEBUG vandreren.database: SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at [(201,)]
+2025-08-15 09:01:42,678 DEBUG vandreren.chat: Retrieved 2 previous messages for context
+2025-08-15 09:01:42,679 DEBUG vandreren.database: SELECT preferences FROM users WHERE id = ? [(101,)]
+2025-08-15 09:01:42,734 INFO vandreren.chat: Building conversation context for Gemini
+2025-08-15 09:01:42,735 DEBUG vandreren.gemini: Preparing chat response with conversation history
+2025-08-15 09:01:42,736 INFO vandreren.gemini: Sending chat request to Gemini API
+2025-08-15 09:01:44,123 DEBUG vandreren.gemini: Gemini API chat response received - 1456 characters
+2025-08-15 09:01:44,124 INFO vandreren.gemini: Chat response generated successfully
+2025-08-15 09:01:44,125 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 09:01:44,189 DEBUG vandreren.database: INSERT INTO messages (conversation_id, content, role, created_at) VALUES (?, ?, ?, ?)
+2025-08-15 09:01:44,245 DEBUG vandreren.database: UPDATE conversations SET updated_at = ? WHERE id = ? [(datetime.utcnow(), 201)]
+2025-08-15 09:01:44,301 INFO vandreren.chat: Chat messages saved and conversation updated
+2025-08-15 09:01:44,302 INFO uvicorn.access: 192.168.1.105:52341 - "POST /chat HTTP/1.1" 200 OK
+
+2025-08-15 09:05:21,445 INFO vandreren.auth: New user registration attempt for email: sarah.wanderer@gmail.com
+2025-08-15 09:05:21,446 DEBUG vandreren.auth: Checking if user exists with email: sarah.wanderer@gmail.com and username: adventure_sarah
+2025-08-15 09:05:21,502 DEBUG vandreren.database: SELECT users.id FROM users WHERE users.email = ? OR users.username = ? [('sarah.wanderer@gmail.com', 'adventure_sarah')]
+2025-08-15 09:05:21,503 DEBUG vandreren.auth: User does not exist, proceeding with registration
+2025-08-15 09:05:21,656 DEBUG vandreren.auth: Password hashed successfully using bcrypt
+2025-08-15 09:05:21,657 INFO vandreren.auth: Creating new user with preferences: {'interests': ['adventure', 'hiking', 'nature', 'photography'], 'travel_style': 'packed', 'budget_preference': 'budget'}
+2025-08-15 09:05:21,712 DEBUG vandreren.database: INSERT INTO users (email, username, hashed_password, full_name, preferences, created_at) VALUES (?, ?, ?, ?, ?, ?)
+2025-08-15 09:05:21,768 INFO vandreren.auth: User registered successfully with ID: 102
+2025-08-15 09:05:21,769 DEBUG vandreren.jwt: Generating JWT token for user: adventure_sarah
+2025-08-15 09:05:21,823 INFO vandreren.auth: JWT token generated with expiry: 2025-08-22 09:05:21
+2025-08-15 09:05:21,824 INFO uvicorn.access: 192.168.1.245:43521 - "POST /auth/register HTTP/1.1" 200 OK
+
+2025-08-15 09:08:45,234 INFO vandreren.itinerary: Fetching all itineraries for user_id: 101
+2025-08-15 09:08:45,235 DEBUG vandreren.database: SELECT * FROM itineraries WHERE user_id = ? ORDER BY created_at DESC [(101,)]
+2025-08-15 09:08:45,289 INFO vandreren.itinerary: Retrieved 1 itineraries for user: john_explorer
+2025-08-15 09:08:45,290 INFO uvicorn.access: 192.168.1.105:52341 - "GET /itineraries HTTP/1.1" 200 OK
+
+2025-08-15 09:12:15,567 INFO vandreren.itinerary: Fetching specific itinerary ID: 301 for user_id: 101
+2025-08-15 09:12:15,568 DEBUG vandreren.database: SELECT * FROM itineraries WHERE id = ? AND user_id = ? [(301, 101)]
