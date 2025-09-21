@@ -2,6 +2,101 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../services/api";
 
+// Map Modal Component
+const MapModal = ({ isOpen, onClose, location, coordinates }) => {
+  const mapRef = React.useRef(null);
+  const mapInstanceRef = React.useRef(null);
+
+  useEffect(() => {
+    if (isOpen && coordinates && coordinates.lat && coordinates.lng) {
+      // Dynamically load Leaflet CSS and JS
+      const loadLeaflet = async () => {
+        // Load CSS
+        if (!document.getElementById("leaflet-css")) {
+          const link = document.createElement("link");
+          link.id = "leaflet-css";
+          link.rel = "stylesheet";
+          link.href =
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css";
+          document.head.appendChild(link);
+        }
+
+        // Load JS
+        if (!window.L) {
+          const script = document.createElement("script");
+          script.src =
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js";
+          document.head.appendChild(script);
+
+          script.onload = () => {
+            initializeMap();
+          };
+        } else {
+          initializeMap();
+        }
+      };
+
+      const initializeMap = () => {
+        if (mapRef.current && !mapInstanceRef.current) {
+          const map = window.L.map(mapRef.current).setView(
+            [coordinates.lat, coordinates.lng],
+            15
+          );
+
+          window.L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+              attribution: "© OpenStreetMap contributors",
+            }
+          ).addTo(map);
+
+          window.L.marker([coordinates.lat, coordinates.lng])
+            .addTo(map)
+            .bindPopup(location)
+            .openPopup();
+
+          mapInstanceRef.current = map;
+        }
+      };
+
+      loadLeaflet();
+    }
+
+    // Cleanup
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [isOpen, coordinates, location]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+        <div className="p-4 border-b flex justify-between items-center">
+          <h3 className="text-lg font-semibold">{location}</h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 text-2xl font-bold"
+          >
+            ×
+          </button>
+        </div>
+        <div className="p-4">
+          <div className="mb-3 text-sm text-gray-600">
+            <span className="font-medium">Coordinates:</span> {coordinates.lat},{" "}
+            {coordinates.lng}
+          </div>
+          <div ref={mapRef} style={{ height: "400px", width: "100%" }}></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const isItineraryResponse = (content) => {
   try {
     const parsed = JSON.parse(content);
@@ -12,6 +107,20 @@ const isItineraryResponse = (content) => {
 };
 
 const ItineraryDisplay = ({ content }) => {
+  const [mapModal, setMapModal] = useState({
+    isOpen: false,
+    location: "",
+    coordinates: null,
+  });
+
+  const openMapModal = (location, coordinates) => {
+    setMapModal({ isOpen: true, location, coordinates });
+  };
+
+  const closeMapModal = () => {
+    setMapModal({ isOpen: false, location: "", coordinates: null });
+  };
+
   try {
     const { message, itinerary } = JSON.parse(content);
 
@@ -41,17 +150,55 @@ const ItineraryDisplay = ({ content }) => {
                 {day.activities.map((activity, index) => (
                   <div key={index} className="border-l-4 border-blue-500 pl-4">
                     <div className="flex justify-between items-start">
-                      <div>
+                      <div className="flex-1">
                         <p className="font-semibold">
                           {activity.time} - {activity.activity}
                         </p>
-                        <p className="text-sm text-gray-600">
-                          {activity.location}
-                        </p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm text-gray-600">
+                            {activity.location}
+                          </p>
+                          {activity.coordinates &&
+                            activity.coordinates.lat &&
+                            activity.coordinates.lng && (
+                              <button
+                                onClick={() =>
+                                  openMapModal(
+                                    activity.location,
+                                    activity.coordinates
+                                  )
+                                }
+                                className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
+                                title="View on map"
+                              >
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </button>
+                            )}
+                        </div>
+                        {activity.coordinates &&
+                          activity.coordinates.lat &&
+                          activity.coordinates.lng && (
+                            <p className="text-xs text-gray-500 mt-1">
+                              📍 {activity.coordinates.lat.toFixed(4)},{" "}
+                              {activity.coordinates.lng.toFixed(4)}
+                            </p>
+                          )}
                         <p className="text-sm text-gray-500">
                           Duration: {activity.duration}
                         </p>
-                        <p className="text-sm mt-1">{activity.description}</p>
+                        {activity.description && (
+                          <p className="text-sm mt-1">{activity.description}</p>
+                        )}
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium text-gray-900">
@@ -77,6 +224,14 @@ const ItineraryDisplay = ({ content }) => {
             </p>
           </div>
         </div>
+
+        {/* Map Modal */}
+        <MapModal
+          isOpen={mapModal.isOpen}
+          onClose={closeMapModal}
+          location={mapModal.location}
+          coordinates={mapModal.coordinates}
+        />
       </div>
     );
   } catch (e) {
