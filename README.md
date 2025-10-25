@@ -638,7 +638,7 @@ Found a bug or have a feature request? Please [open an issue](https://github.com
 
 <div align="center">
 
-**Made with ❤️ by Udayraj Jhala**
+**Made with ❤️ by Udayraj, Saumay, Aarian, Shreyash**
 
 ⭐ Star this repo if you find it helpful!
 
