@@ -2,12 +2,15 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from datetime import datetime
 import json
+import re
 
 from models.database import get_db
 from models.user import User
 from models.conversation import Conversation, Message
+from models.itinerary import Itinerary
 from models.schemas import ChatMessage
 from utils.auth import get_current_user
+from utils.route_optimizer import optimize_itinerary_routes
 from services.gemini_service import gemini_agent
 
 router = APIRouter()
@@ -99,6 +102,84 @@ async def chat(
 
     # Update conversation timestamp
     conversation.updated_at = datetime.utcnow()
+
+    # Check if response contains an itinerary (JSON format)
+    try:
+        response_json = json.loads(response)
+
+        # If response contains an itinerary object, save/update it
+        if "itinerary" in response_json and isinstance(
+            response_json["itinerary"], dict
+        ):
+            itinerary_data = response_json["itinerary"]
+
+            # Optimize routes in the itinerary
+            try:
+                optimized_itinerary = optimize_itinerary_routes(response_json)
+                response = json.dumps(optimized_itinerary)
+                itinerary_data = optimized_itinerary["itinerary"]
+            except Exception as e:
+                print(f"Route optimization failed: {str(e)}")
+
+            # Extract destination and dates from itinerary
+            destination = itinerary_data.get("destination", "Unknown")
+            duration = itinerary_data.get("duration", "")
+
+            # Try to extract dates from the itinerary days if available
+            start_date = None
+            end_date = None
+            if "days" in itinerary_data and len(itinerary_data["days"]) > 0:
+                first_day = itinerary_data["days"][0]
+                last_day = itinerary_data["days"][-1]
+                start_date = first_day.get("date")
+                end_date = last_day.get("date")
+
+            # Get budget from itinerary
+            budget = itinerary_data.get("total_estimated_cost")
+
+            # Check if this conversation already has an itinerary
+            existing_itinerary = (
+                db.query(Itinerary)
+                .filter(Itinerary.conversation_id == conversation.id)
+                .first()
+            )
+
+            if existing_itinerary:
+                # Update existing itinerary with latest version
+                existing_itinerary.itinerary_data = response
+                existing_itinerary.destination = destination
+                if start_date:
+                    existing_itinerary.start_date = start_date
+                if end_date:
+                    existing_itinerary.end_date = end_date
+                if budget:
+                    existing_itinerary.budget = budget
+                existing_itinerary.updated_at = datetime.utcnow()
+                print(f"Updated existing itinerary: {existing_itinerary.id}")
+            else:
+                # Create new itinerary
+                new_itinerary = Itinerary(
+                    user_id=current_user.id,
+                    conversation_id=conversation.id,
+                    title=f"Trip to {destination}",
+                    destination=destination,
+                    start_date=start_date or "",
+                    end_date=end_date or "",
+                    budget=budget,
+                    itinerary_data=response,
+                )
+                db.add(new_itinerary)
+                print(f"Created new itinerary for conversation {conversation.id}")
+
+            # Update the assistant message with the optimized response
+            assistant_message.content = response
+
+    except json.JSONDecodeError:
+        # Response is not JSON, just a regular chat message
+        pass
+    except Exception as e:
+        print(f"Error processing itinerary in chat: {str(e)}")
+        # Continue without failing the chat
 
     db.commit()
 
