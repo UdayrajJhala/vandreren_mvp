@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import NotificationBell from "./NotificationBell";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -34,18 +35,34 @@ export default function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/dashboard" className="text-gray-700 hover:text-blue-600">
+            <Link
+              to="/dashboard"
+              className="text-gray-700 hover:text-blue-600 transition"
+            >
               Dashboard
             </Link>
-            <Link to="/chat" className="text-gray-700 hover:text-blue-600">
+            <Link
+              to="/chat"
+              className="text-gray-700 hover:text-blue-600 transition"
+            >
               Chat
             </Link>
-            <Link to="/profile" className="text-gray-700 hover:text-blue-600">
+            <Link
+              to="/groups"
+              className="text-gray-700 hover:text-blue-600 transition"
+            >
+              Groups
+            </Link>
+            <Link
+              to="/profile"
+              className="text-gray-700 hover:text-blue-600 transition"
+            >
               Profile
             </Link>
           </nav>
 
           <div className="flex items-center space-x-4">
+            <NotificationBell />
             <span className="text-gray-700">Welcome, {user.username}</span>
             <button
               onClick={handleLogout}

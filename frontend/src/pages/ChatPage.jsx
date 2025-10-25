@@ -50,7 +50,18 @@ const MapModal = ({ isOpen, onClose, location, coordinates }) => {
             }
           ).addTo(map);
 
-          window.L.marker([coordinates.lat, coordinates.lng])
+          // Create custom marker icon using div
+          const customIcon = window.L.divIcon({
+            className: "custom-div-icon",
+            html: `<div style="background-color: #3B82F6; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"><div style="transform: rotate(45deg); margin-top: 4px; margin-left: 8px; color: white; font-size: 16px;">📍</div></div>`,
+            iconSize: [30, 42],
+            iconAnchor: [15, 42],
+            popupAnchor: [0, -42],
+          });
+
+          window.L.marker([coordinates.lat, coordinates.lng], {
+            icon: customIcon,
+          })
             .addTo(map)
             .bindPopup(location)
             .openPopup();
@@ -202,7 +213,7 @@ const ItineraryDisplay = ({ content }) => {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium text-gray-900">
-                          ${activity.cost}
+                          ₹{activity.cost}
                         </p>
                       </div>
                     </div>
@@ -220,7 +231,7 @@ const ItineraryDisplay = ({ content }) => {
 
           <div className="bg-blue-50 p-4 rounded-lg mt-4">
             <p className="text-center font-medium text-blue-900">
-              Total Estimated Cost: ${itinerary.total_estimated_cost}
+              Total Estimated Cost: ₹{itinerary.total_estimated_cost}
             </p>
           </div>
         </div>
@@ -297,27 +308,65 @@ export default function ChatPage() {
         conversation_id: conversationId,
       });
 
-      const { conversation_id, response: aiResponse } = response.data;
+      const {
+        conversation_id,
+        response: aiResponse,
+        query_rejected,
+      } = response.data;
 
       if (!conversationId) {
         setConversationId(conversation_id);
       }
 
-      // Add AI response to UI
+      // Add AI response to UI with special styling if query was rejected
       const aiMessage = {
         id: Date.now() + 1,
         content: aiResponse,
         role: "assistant",
         created_at: new Date().toISOString(),
+        rejected: query_rejected || false,
       };
       setMessages((prev) => [...prev, aiMessage]);
+
+      // Show toast notification if query was rejected
+      if (query_rejected) {
+        showToast(
+          "⚠️ Query outside scope - Please ask travel-related questions",
+          "warning"
+        );
+      }
     } catch (error) {
       console.error("Error sending message:", error);
+
+      // Show error toast
+      const errorMsg = error.response?.data?.detail || "Failed to send message";
+      showToast(errorMsg, "error");
+
       // Remove the user message if there was an error
       setMessages((prev) => prev.slice(0, -1));
     } finally {
       setLoading(false);
     }
+  };
+
+  const showToast = (message, type = "info") => {
+    const toast = document.createElement("div");
+    toast.className = `fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform transition-all duration-300 ${
+      type === "success"
+        ? "bg-green-500"
+        : type === "error"
+        ? "bg-red-500"
+        : type === "warning"
+        ? "bg-yellow-500"
+        : "bg-blue-500"
+    }`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.opacity = "0";
+      setTimeout(() => document.body.removeChild(toast), 300);
+    }, 4000);
   };
 
   return (
@@ -349,9 +398,17 @@ export default function ChatPage() {
                   className={`max-w-full lg:max-w-3xl px-4 py-2 rounded-lg ${
                     message.role === "user"
                       ? "bg-blue-600 text-white"
+                      : message.rejected
+                      ? "bg-yellow-100 text-gray-800 border-2 border-yellow-400"
                       : "bg-gray-200 text-gray-800"
                   }`}
                 >
+                  {message.rejected && (
+                    <div className="flex items-center gap-2 mb-2 text-yellow-700 font-semibold text-sm">
+                      <span>⚠️</span>
+                      <span>Query Outside Scope</span>
+                    </div>
+                  )}
                   {message.role === "assistant" &&
                   isItineraryResponse(message.content) ? (
                     <ItineraryDisplay content={message.content} />

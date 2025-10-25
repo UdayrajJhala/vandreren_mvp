@@ -80,11 +80,11 @@ export default function CreateItineraryModal({ onClose, onSuccess }) {
           <input
             name="budget"
             type="number"
-            step="0.01"
+            step="1"
             value={formData.budget}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Budget (optional)"
+            placeholder="Budget in ₹ (Indian Rupees) - Optional"
           />
 
           <input

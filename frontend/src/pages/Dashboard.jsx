@@ -95,7 +95,7 @@ export default function Dashboard() {
                   </p>
                   {itinerary.budget && (
                     <p className="text-sm text-blue-600 mt-2">
-                      Budget: ${itinerary.budget}
+                      Budget: ₹{itinerary.budget.toLocaleString("en-IN")}
                     </p>
                   )}
                 </Link>
