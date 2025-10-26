@@ -2,6 +2,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from datetime import datetime
 import json
+import re
+import string
 import time
 from models.database import get_db
 from models.user import User
@@ -16,13 +18,39 @@ from services.gemini_service import gemini_agent
 router = APIRouter()
 
 
+def clean_json_string(json_str):
+    """Clean and fix common JSON formatting issues from LLM responses"""
+    import re
+
+    # Remove any markdown code block markers
+    json_str = re.sub(r"^```json\s*", "", json_str)
+    json_str = re.sub(r"\s*```$", "", json_str)
+
+    # Fix malformed coordinates patterns like: {"lat": X, " "lng": Y}
+    # Match patterns where there's a space and extra quote before "lng" or other keys
+    json_str = re.sub(r',\s*"\s+"([a-zA-Z_]+)":', r', "\1":', json_str)
+
+    # Fix patterns like: {"lat": X," "lng": Y} (no space after comma)
+    json_str = re.sub(r'," "([a-zA-Z_]+)":', r', "\1":', json_str)
+
+    # Fix trailing commas before closing braces/brackets
+    json_str = re.sub(r",(\s*[}\]])", r"\1", json_str)
+
+    # Remove any BOM or invisible characters
+    json_str = json_str.strip("\ufeff\x00")
+
+    return json_str
+
+
 def safe_json_dumps(data):
     """Safely convert data to JSON string with proper error handling"""
     try:
         if isinstance(data, str):
-            # Validate it's valid JSON first
-            json.loads(data)
-            return data
+            # Clean the string first
+            cleaned = clean_json_string(data)
+            # Validate it's valid JSON
+            json.loads(cleaned)
+            return cleaned
         else:
             return json.dumps(data, ensure_ascii=False, indent=None)
     except json.JSONDecodeError as e:
@@ -38,7 +66,9 @@ def safe_json_loads(data):
     if isinstance(data, dict):
         return data
     try:
-        return json.loads(data)
+        # Clean the JSON string before parsing
+        cleaned_data = clean_json_string(data)
+        return json.loads(cleaned_data)
     except json.JSONDecodeError as e:
         print(f"Failed to parse JSON: {e}")
         print(f"Problematic data snippet: ...{data[max(0, e.pos-50):e.pos+50]}...")
@@ -82,27 +112,57 @@ async def create_itinerary(
         itinerary_text = await gemini_agent.generate_itinerary(
             trip_request, user_preferences
         )
-        safe_name = itinerary_text[34:55].replace("/", "_").replace(":", "_")
-        with open(f"similarity_search_output_{safe_name}.txt", "w", encoding="utf-8") as f:
+
+        # Create a safe filename from destination and timestamp
+        safe_chars = string.ascii_letters + string.digits + " _-"
+        safe_destination = "".join(
+            c if c in safe_chars else "_" for c in trip_request.destination
+        )
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        safe_name = f"{safe_destination}_{timestamp}"
+
+        with open(
+            f"similarity_search_output_{safe_name}.txt", "w", encoding="utf-8"
+        ) as f:
             f.write(itinerary_text)
-        
+
         print(f"Itinerary generated, length: {len(itinerary_text)}")
+
+        # Clean and validate JSON first
+        try:
+            print("Cleaning and validating JSON response...")
+            itinerary_text = clean_json_string(itinerary_text)
+            test_parse = json.loads(itinerary_text)
+            print("✓ Initial JSON validation passed")
+        except json.JSONDecodeError as e:
+            print(f"✗ Initial JSON validation failed: {e}")
+            print(f"Error at position {e.pos}: {e.msg}")
+            print(f"Context: ...{itinerary_text[max(0, e.pos-100):e.pos+100]}...")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Generated itinerary has invalid JSON format at position {e.pos}: {e.msg}",
+            )
 
         # Optimize routes in the itinerary
         try:
             itinerary_json = safe_json_loads(itinerary_text)
             optimized_itinerary = optimize_itinerary_routes(itinerary_json)
             itinerary_text = safe_json_dumps(optimized_itinerary)
-            print("Route optimization successful")
+            print("✓ Route optimization successful")
         except Exception as e:
-            print(f"Route optimization failed: {str(e)}")
-            # Ensure we still have valid JSON
+            print(f"⚠ Route optimization failed: {str(e)}")
+            # Ensure we still have valid JSON even if optimization fails
             try:
                 itinerary_text = safe_json_dumps(itinerary_text)
-            except:
-                pass
+                print("✓ Proceeding with non-optimized itinerary")
+            except Exception as fallback_error:
+                print(f"✗ Failed to process itinerary: {fallback_error}")
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Failed to process itinerary data: {str(fallback_error)}",
+                )
 
-        # Validate final JSON before saving
+        # Final validation before saving
         try:
             test_parse = json.loads(itinerary_text)
             print("✓ Final JSON validation passed")
