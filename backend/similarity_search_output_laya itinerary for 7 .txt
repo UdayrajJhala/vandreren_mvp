@@ -1,0 +1,492 @@
+{
+  "message": "Here is your Meghalaya itinerary for 7 days, focusing on a balanced travel style with mid-range budget in Indian Rupees.",
+  "itinerary": {
+    "destination": "Meghalaya",
+    "duration": "7 days",
+    "total_estimated_cost": 24500,
+    "currency": "INR",
+    "days": [
+      {
+        "day": 1,
+        "date": "2025-10-29",
+        "theme": "Arrival in Guwahati & Transfer to Shillong",
+        "activities": [
+          {
+            "time": "09:00",
+            "activity": "Arrival at Guwahati Airport (GAU)",
+            "location": "Guwahati Airport",
+            "duration": "0.5 hours",
+            "cost": 0,
+            "description": "Arrive at Guwahati Airport. Meet your driver.",
+            "coordinates": {"lat": 26.1073, "lng": 91.5876}
+          },
+          {
+            "time": "09:30",
+            "activity": "Transfer to Shillong",
+            "location": "Shillong",
+            "duration": "3 hours",
+            "cost": 2500,
+            "description": "Drive from Guwahati to Shillong (approx. 3 hours).",
+            "coordinates": {"lat": 25.5789, "lng": 91.8933}
+          },
+          {
+            "time": "12:30",
+            "activity": "Check-in to Hotel",
+            "location": "Hotel Polo Towers Shillong (or similar)",
+            "duration": "1 hour",
+            "cost": 3500,
+            "description": "Check into your pre-booked hotel in Shillong. Freshen up.",
+            "coordinates": {"lat": 25.5775, "lng": 91.8808}
+          },
+          {
+            "time": "13:30",
+            "activity": "Lunch",
+            "location": "City Hut Family Dhaba",
+            "duration": "1 hour",
+            "cost": 500,
+            "description": "Enjoy a traditional Khasi lunch at City Hut Family Dhaba.",
+            "coordinates": {"lat": 25.5753, "lng": 91.8819}
+          },
+          {
+            "time": "14:30",
+            "activity": "Visit Ward's Lake",
+            "location": "Ward's Lake",
+            "duration": "2 hours",
+            "cost": 50,
+            "description": "Enjoy boating and the serene environment at Ward's Lake.",
+            "coordinates": {"lat": 25.5704, "lng": 91.8844}
+          },
+          {
+            "time": "16:30",
+            "activity": "Explore Police Bazaar",
+            "location": "Police Bazaar",
+            "duration": "2.5 hours",
+            "cost": 100,
+            "description": "Explore the local market for souvenirs and street food.",
+            "coordinates": {"lat": 25.5722, "lng": 91.8814}
+          },
+          {
+            "time": "19:00",
+            "activity": "Dinner",
+            "location": "The Lounge",
+            "duration": "1.5 hours",
+            "cost": 700,
+            "description": "Have dinner at The Lounge, known for its ambiance and food.",
+            "coordinates": {"lat": 25.5775, "lng": 91.8808}
+          }
+        ]
+      },
+      {
+        "day": 2,
+        "date": "2025-10-30",
+        "theme": "Shillong Sightseeing",
+        "activities": [
+          {
+            "time": "09:00",
+            "activity": "Breakfast",
+            "location": "Hotel",
+            "duration": "1 hour",
+            "cost": 0,
+            "description": "Enjoy breakfast at your hotel.",
+            "coordinates": {"lat": 25.5775, "lng": 91.8808}
+          },
+          {
+            "time": "10:00",
+            "activity": "Visit Elephant Falls",
+            "location": "Elephant Falls",
+            "duration": "2 hours",
+            "cost": 50,
+            "description": "Visit the three-tiered Elephant Falls.",
+            "coordinates": {"lat": 25.5208, "lng": 91.8975}
+          },
+          {
+            "time": "12:00",
+            "activity": "Visit Shillong Peak",
+            "location": "Shillong Peak",
+            "duration": "2 hours",
+            "cost": 50,
+            "description": "Get panoramic views of Shillong from Shillong Peak.",
+            "coordinates": {"lat": 25.5222, "lng": 91.8536}
+          },
+          {
+            "time": "14:00",
+            "activity": "Lunch",
+            "location": "Jiva Grill",
+            "duration": "1 hour",
+            "cost": 600,
+            "description": "Lunch at Jiva Grill.",
+            "coordinates": {"lat": 25.5644, "lng": 91.8792}
+          },
+          {
+            "time": "15:00",
+            "activity": "Visit Don Bosco Museum",
+            "location": "Don Bosco Museum",
+            "duration": "2.5 hours",
+            "cost": 100,
+            "description": "Explore the indigenous cultures of Northeast India.",
+            "coordinates": {"lat": 25.5675, "lng": 91.8867}
+          },
+          {
+            "time": "17:30",
+            "activity": "Cathedral of Mary Help of Christians",
+            "location": "Cathedral of Mary Help of Christians",
+            "duration": "1.5 hours",
+            "cost": 0,
+            "description": "Visit the Cathedral of Mary Help of Christians.",
+            "coordinates": {"lat": 25.5767, "lng": 91.8878}
+          },
+          {
+            "time": "19:00",
+            "activity": "Dinner",
+            "location": "Dylan's Cafe",
+            "duration": "1.5 hours",
+            "cost": 800,
+            "description": "Dinner at Dylan's Cafe.",
+            "coordinates": {"lat": 25.5747, "lng": 91.8792}
+          }
+        ]
+      },
+      {
+        "day": 3,
+        "date": "2025-10-31",
+        "theme": "Cherrapunjee Exploration",
+        "activities": [
+          {
+            "time": "08:00",
+            "activity": "Breakfast",
+            "location": "Hotel",
+            "duration": "1 hour",
+            "cost": 0,
+            "description": "Enjoy breakfast at your hotel.",
+            "coordinates": {"lat": 25.5775, "lng": 91.8808}
+          },
+          {
+            "time": "09:00",
+            "activity": "Drive to Cherrapunjee",
+            "location": "Cherrapunjee",
+            "duration": "2 hours",
+            "cost": 2000,
+            "description": "Drive from Shillong to Cherrapunjee (Sohra).",
+            "coordinates": {"lat": 25.2942, "lng": 91.7000}
+          },
+          {
+            "time": "11:00",
+            "activity": "Visit Nohkalikai Falls",
+            "location": "Nohkalikai Falls",
+            "duration": "2 hours",
+            "cost": 50,
+            "description": "Visit the tallest plunge waterfall in India.",
+            "coordinates": {"lat": 25.3214, "lng": 91.7442}
+          },
+          {
+            "time": "13:00",
+            "activity": "Lunch",
+            "location": "Polo Orchid Resort",
+            "duration": "1 hour",
+            "cost": 700,
+            "description": "Lunch at Polo Orchid Resort.",
+            "coordinates": {"lat": 25.3025, "lng": 91.7094}
+          },
+          {
+            "time": "14:00",
+            "activity": "Mawsmai Cave",
+            "location": "Mawsmai Cave",
+            "duration": "1.5 hours",
+            "cost": 50,
+            "description": "Explore the limestone caves.",
+            "coordinates": {"lat": 25.3208, "lng": 91.7119}
+          },
+          {
+            "time": "15:30",
+            "activity": "Seven Sisters Falls",
+            "location": "Seven Sisters Falls",
+            "duration": "1.5 hours",
+            "cost": 50,
+            "description": "View the Seven Sisters Falls (Nohsngithiang Falls).",
+            "coordinates": {"lat": 25.3156, "lng": 91.6889}
+          },
+          {
+            "time": "17:00",
+            "activity": "Drive back to Shillong",
+            "location": "Shillong",
+            "duration": "2 hours",
+            "cost": 2000,
+            "description": "Drive back to Shillong.",
+            "coordinates": {"lat": 25.5789, "lng": 91.8933}
+          },
+          {
+            "time": "19:00",
+            "activity": "Dinner",
+            "location": "ML05 Cafe",
+            "duration": "1.5 hours",
+            "cost": 700,
+            "description": "Dinner at ML05 Cafe.",
+            "coordinates": {"lat": 25.5758, "lng": 91.8797}
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "date": "2025-11-01",
+        "theme": "Dawki & Mawlynnong - The Cleanest Village",
+        "activities": [
+          {
+            "time": "08:00",
+            "activity": "Breakfast",
+            "location": "Hotel",
+            "duration": "1 hour",
+            "cost": 0,
+            "description": "Enjoy breakfast at your hotel.",
+            "coordinates": {"lat": 25.5775, "lng": 91.8808}
+          },
+          {
+            "time": "09:00",
+            "activity": "Drive to Dawki",
+            "location": "Dawki",
+            "duration": "3 hours",
+            "cost": 2500,
+            "description": "Drive to Dawki.",
+            "coordinates": {"lat": 25.1739, "lng": 92.0075}
+          },
+          {
+            "time": "12:00",
+            "activity": "Boating in Umngot River",
+            "location": "Umngot River, Dawki",
+            "duration": "2 hours",
+            "cost": 800,
+            "description": "Enjoy boating in the crystal-clear Umngot River.",
+            "coordinates": {"lat": 25.1739, "lng": 92.0075}
+          },
+          {
+            "time": "14:00",
+            "activity": "Lunch",
+            "location": "Local Restaurant in Dawki",
+            "duration": "1 hour",
+            "cost": 500,
+            "description": "Have lunch at a local restaurant in Dawki.",
+            "coordinates": {"lat": 25.1739, "lng": 92.0075}
+          },
+          {
+            "time": "15:00",
+            "activity": "Drive to Mawlynnong",
+            "location": "Mawlynnong",
+            "duration": "1 hour",
+            "cost": 500,
+            "description": "Drive to Mawlynnong, Asia's Cleanest Village.",
+            "coordinates": {"lat": 25.2389, "lng": 91.9167}
+          },
+          {
+            "time": "16:00",
+            "activity": "Living Root Bridge",
+            "location": "Living Root Bridge, Mawlynnong",
+            "duration": "2 hours",
+            "cost": 50,
+            "description": "Visit the Living Root Bridge.",
+            "coordinates": {"lat": 25.2389, "lng": 91.9167}
+          },
+          {
+            "time": "18:00",
+            "activity": "Drive back to Shillong",
+            "location": "Shillong",
+            "duration": "3 hours",
+            "cost": 2500,
+            "description": "Drive back to Shillong.",
+            "coordinates": {"lat": 25.5789, "lng": 91.8933}
+          },
+          {
+            "time": "21:00",
+            "activity": "Dinner",
+            "location": "Lamee Restaurant",
+            "duration": "1.5 hours",
+            "cost": 700,
+            "description": "Dinner at Lamee Restaurant.",
+            "coordinates": {"lat": 25.5772, "lng": 91.8797}
+          }
+        ]
+      },
+      {
+        "day": 5,
+        "date": "2025-11-02",
+        "theme": "Exploring Sacred Forest of Mawphlang",
+        "activities": [
+          {
+            "time": "09:00",
+            "activity": "Breakfast",
+            "location": "Hotel",
+            "duration": "1 hour",
+            "cost": 0,
+            "description": "Breakfast at the hotel.",
+            "coordinates": {"lat": 25.5775, "lng": 91.8808}
+          },
+          {
+            "time": "10:00",
+            "activity": "Drive to Mawphlang",
+            "location": "Mawphlang",
+            "duration": "1 hour",
+            "cost": 1500,
+            "description": "Drive to Mawphlang Sacred Forest.",
+            "coordinates": {"lat": 25.4583, "lng": 91.8000}
+          },
+          {
+            "time": "11:00",
+            "activity": "Explore Mawphlang Sacred Forest",
+            "location": "Mawphlang Sacred Forest",
+            "duration": "3 hours",
+            "cost": 100,
+            "description": "Guided tour of the Sacred Forest.",
+            "coordinates": {"lat": 25.4583, "lng": 91.8000}
+          },
+          {
+            "time": "14:00",
+            "activity": "Lunch",
+            "location": "Traveller's Nest Mawphlang",
+            "duration": "1.5 hours",
+            "cost": 600,
+            "description": "Enjoy lunch at Traveller's Nest Mawphlang.",
+            "coordinates": {"lat": 25.4583, "lng": 91.8000}
+          },
+          {
+            "time": "15:30",
+            "activity": "Mawphlang Dam",
+            "location": "Mawphlang Dam",
+            "duration": "2 hours",
+            "cost": 0,
+            "description": "Visit the Mawphlang Dam.",
+            "coordinates": {"lat": 25.4583, "lng": 91.8000}
+          },
+          {
+            "time": "17:30",
+            "activity": "Drive back to Shillong",
+            "location": "Shillong",
+            "duration": "1 hour",
+            "cost": 1500,
+            "description": "Drive back to Shillong.",
+            "coordinates": {"lat": 25.5789, "lng": 91.8933}
+          },
+          {
+            "time": "18:30",
+            "activity": "Relax and Rest",
+            "location": "Hotel",
+            "duration": "1 hour",
+            "cost": 0,
+            "description": "Relax at the hotel",
+            "coordinates": {"lat": 25.5775, "lng": 91.8808}
+          },
+          {
+            "time": "19:30",
+            "activity": "Dinner",
+            "location": "Cafe Shillong",
+            "duration": "1.5 hours",
+            "cost": 800,
+            "description": "Dinner at Cafe Shillong.",
+            "coordinates": {"lat": 25.5761, "lng": 91.8792}
+          }
+        ]
+      },
+      {
+        "day": 6,
+        "date": "2025-11-03",
+        "theme": "Leisure Day in Shillong",
+        "activities": [
+          {
+            "time": "09:00",
+            "activity": "Breakfast",
+            "location": "Hotel",
+            "duration": "1 hour",
+            "cost": 0,
+            "description": "Enjoy breakfast at your hotel.",
+            "coordinates": {"lat": 25.5775, "lng": 91.8808}
+          },
+          {
+            "time": "10:00",
+            "activity": "Shopping at Police Bazaar",
+            "location": "Police Bazaar",
+            "duration": "3 hours",
+            "cost": 500,
+            "description": "Shopping for local handicrafts and souvenirs.",
+            "coordinates": {"lat": 25.5722, "lng": 91.8814}
+          },
+          {
+            "time": "13:00",
+            "activity": "Lunch",
+            "location": "Dejavu Restaurant",
+            "duration": "1.5 hours",
+            "cost": 700,
+            "description": "Lunch at Dejavu Restaurant.",
+            "coordinates": {"lat": 25.5758, "lng": 91.8797}
+          },
+          {
+            "time": "14:30",
+            "activity": "Relax at Lady Hydari Park",
+            "location": "Lady Hydari Park",
+            "duration": "2.5 hours",
+            "cost": 50,
+            "description": "Relax at the beautiful Lady Hydari Park.",
+            "coordinates": {"lat": 25.5681, "lng": 91.8786}
+          },
+          {
+            "time": "17:00",
+            "activity": "Evening Tea",
+            "location": "Bread Cafe",
+            "duration": "1.5 hours",
+            "cost": 400,
+            "description": "Have evening tea and snacks at Bread Cafe.",
+            "coordinates": {"lat": 25.5728, "lng": 91.8789}
+          },
+          {
+            "time": "19:00",
+            "activity": "Farewell Dinner",
+            "location": "The Wok Chinese Restaurant",
+            "duration": "1.5 hours",
+            "cost": 900,
+            "description": "Enjoy a farewell dinner at The Wok Chinese Restaurant.",
+            "coordinates": {"lat": 25.5772, "lng": 91.8797}
+          }
+        ]
+      },
+      {
+        "day": 7,
+        "date": "2025-11-04",
+        "theme": "Departure",
+        "activities": [
+          {
+            "time": "08:00",
+            "activity": "Breakfast",
+            "location": "Hotel",
+            "duration": "1 hour",
+            "cost": 0,
+            "description": "Enjoy breakfast at your hotel.",
+            "coordinates": {"lat": 25.5775, "lng": 91.8808}
+          },
+          {
+            "time": "09:00",
+            "activity": "Check-out from Hotel",
+            "location": "Hotel Polo Towers Shillong (or similar)",
+            "duration": "0.5 hours",
+            "cost": 0,
+            "description": "Check out from your hotel.",
+            "coordinates": {"lat": 25.5775, "lng": 91.8808}
+          },
+          {
+            "time": "09:30",
+            "activity": "Transfer to Guwahati Airport",
+            "location": "Guwahati Airport",
+            "duration": "3 hours",
+            "cost": 2500,
+            "description": "Drive to Guwahati Airport (GAU).",
+            "coordinates": {"lat": 26.1073, "lng": 91.5876}
+          },
+          {
+            "time": "12:30",
+            "activity": "Departure from Guwahati Airport (GAU)",
+            "location": "Guwahati Airport",
+            "duration": "0.5 hours",
+            "cost": 0,
+            "description": "Depart from Guwahati Airport.",
+            "coordinates": {"lat": 26.1073, "lng": 91.5876}
+          }
+        ]
+      }
+    ]
+  }
+}
