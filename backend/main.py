@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI):
     """Lifespan event handler for startup and shutdown"""
     # Startup
     scheduler.add_job(
-        lambda: httpx.get("http://localhost:8000/ping", timeout=10.0),
+        lambda: httpx.get("https://vandreren.onrender.com/ping", timeout=10.0),
         "interval",
         minutes=10,
         id="self_ping",
