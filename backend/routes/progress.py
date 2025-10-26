@@ -112,13 +112,34 @@ async def get_activity_progress(
         .all()
     )
 
-    # Calculate statistics
-    itinerary_data = json.loads(itinerary.itinerary_data)
-    itinerary_obj = itinerary_data.get("itinerary", itinerary_data)
+    # Calculate statistics with better error handling
+    try:
+        itinerary_data = json.loads(itinerary.itinerary_data)
+        itinerary_obj = itinerary_data.get("itinerary", itinerary_data)
 
-    total_activities = sum(
-        len(day.get("activities", [])) for day in itinerary_obj.get("days", [])
-    )
+        total_activities = sum(
+            len(day.get("activities", [])) for day in itinerary_obj.get("days", [])
+        )
+    except json.JSONDecodeError as e:
+        print(f"Corrupted itinerary data for ID {itinerary_id}: {e}")
+        print(f"Error at position {e.pos}: {e.msg}")
+        
+        # Try to show a snippet of the problematic area
+        data = itinerary.itinerary_data
+        error_snippet = data[max(0, e.pos-100):min(len(data), e.pos+100)]
+        print(f"Data around error: ...{error_snippet}...")
+        
+        raise HTTPException(
+            status_code=500,
+            detail=f"Itinerary data is corrupted and cannot be parsed. Please regenerate this itinerary. Error: {e.msg} at position {e.pos}"
+        )
+    except Exception as e:
+        print(f"Unexpected error parsing itinerary {itinerary_id}: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to parse itinerary data: {str(e)}"
+        )
+
     completed_activities = sum(1 for p in progress_records if p.completed == 1)
     progress_percentage = (
         (completed_activities / total_activities * 100) if total_activities > 0 else 0

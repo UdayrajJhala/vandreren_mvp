@@ -18,7 +18,7 @@ class GeminiTravelAgent:
                 "temperature": 0.7,
                 "top_p": 0.95,
                 "top_k": 40,
-                "max_output_tokens": 8192,
+                # "max_output_tokens": 8192,
             },
         )
 

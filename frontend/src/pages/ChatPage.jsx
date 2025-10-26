@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../services/api";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, MapPin, AlertTriangle, Loader } from "lucide-react";
 
 // Map Modal Component
-const MapModal = ({ isOpen, onClose, location, coordinates }) => {
-  const mapRef = React.useRef(null);
-  const mapInstanceRef = React.useRef(null);
+const MapModal = ({ isOpen, onClose, location, coordinates, darkMode }) => {
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
 
   useEffect(() => {
     if (isOpen && coordinates && coordinates.lat && coordinates.lng) {
-      // Dynamically load Leaflet CSS and JS
       const loadLeaflet = async () => {
-        // Load CSS
         if (!document.getElementById("leaflet-css")) {
           const link = document.createElement("link");
           link.id = "leaflet-css";
@@ -21,16 +21,12 @@ const MapModal = ({ isOpen, onClose, location, coordinates }) => {
           document.head.appendChild(link);
         }
 
-        // Load JS
         if (!window.L) {
           const script = document.createElement("script");
           script.src =
             "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js";
           document.head.appendChild(script);
-
-          script.onload = () => {
-            initializeMap();
-          };
+          script.onload = () => initializeMap();
         } else {
           initializeMap();
         }
@@ -42,7 +38,6 @@ const MapModal = ({ isOpen, onClose, location, coordinates }) => {
             [coordinates.lat, coordinates.lng],
             15
           );
-
           window.L.tileLayer(
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             {
@@ -50,10 +45,9 @@ const MapModal = ({ isOpen, onClose, location, coordinates }) => {
             }
           ).addTo(map);
 
-          // Create custom marker icon using div
           const customIcon = window.L.divIcon({
             className: "custom-div-icon",
-            html: `<div style="background-color: #3B82F6; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"><div style="transform: rotate(45deg); margin-top: 4px; margin-left: 8px; color: white; font-size: 16px;">📍</div></div>`,
+            html: `<div style="background-color: #6B7280; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"><div style="transform: rotate(45deg); margin-top: 4px; margin-left: 8px; color: white; font-size: 16px;">📍</div></div>`,
             iconSize: [30, 42],
             iconAnchor: [15, 42],
             popupAnchor: [0, -42],
@@ -73,7 +67,6 @@ const MapModal = ({ isOpen, onClose, location, coordinates }) => {
       loadLeaflet();
     }
 
-    // Cleanup
     return () => {
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
@@ -85,26 +78,41 @@ const MapModal = ({ isOpen, onClose, location, coordinates }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
-        <div className="p-4 border-b flex justify-between items-center">
-          <h3 className="text-lg font-semibold">{location}</h3>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.95, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.95, y: 20 }}
+        onClick={(e) => e.stopPropagation()}
+        className="bg-[#1a1a1a] rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden border border-gray-800"
+      >
+        <div className="p-4 border-b border-gray-800 flex justify-between items-center">
+          <h3 className="text-base font-semibold text-gray-200">{location}</h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl font-bold"
+            className="text-gray-400 hover:text-gray-200 text-xl transition-colors"
           >
             ×
           </button>
         </div>
         <div className="p-4">
-          <div className="mb-3 text-sm text-gray-600">
+          <div className="mb-3 text-xs text-gray-400">
             <span className="font-medium">Coordinates:</span> {coordinates.lat},{" "}
             {coordinates.lng}
           </div>
-          <div ref={mapRef} style={{ height: "400px", width: "100%" }}></div>
+          <div
+            ref={mapRef}
+            style={{ height: "400px", width: "100%", borderRadius: "8px" }}
+          ></div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -117,56 +125,46 @@ const isItineraryResponse = (content) => {
   }
 };
 
-const ItineraryDisplay = ({ content }) => {
-  const [mapModal, setMapModal] = useState({
-    isOpen: false,
-    location: "",
-    coordinates: null,
-  });
-
-  const openMapModal = (location, coordinates) => {
-    setMapModal({ isOpen: true, location, coordinates });
-  };
-
-  const closeMapModal = () => {
-    setMapModal({ isOpen: false, location: "", coordinates: null });
-  };
-
+const ItineraryDisplay = ({ content, darkMode, openMapModal }) => {
   try {
     const { message, itinerary } = JSON.parse(content);
 
     return (
-      <div className="space-y-6">
-        <div className="text-lg font-medium text-gray-900 mb-4">{message}</div>
+      <div className="space-y-4">
+        <div className="text-sm font-medium text-gray-200 mb-3">
+          {message}
+        </div>
 
-        <div className="grid grid-cols-1 gap-6 mt-4">
+        <div className="grid grid-cols-1 gap-4">
           {itinerary.days.map((day) => (
-            <div
+            <motion.div
               key={day.day}
-              className="bg-white p-6 rounded-lg shadow border"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-[#252525] p-5 rounded-lg border border-gray-800"
             >
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-between items-center mb-3 pb-3 border-b border-gray-800">
                 <div>
-                  <h3 className="text-lg font-bold">Day {day.day}</h3>
-                  <p className="text-gray-600">{day.date}</p>
+                  <h3 className="text-base font-semibold text-gray-200">
+                    Day {day.day}
+                  </h3>
+                  <p className="text-xs text-gray-500">{day.date}</p>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-500">
-                    {day.theme}
-                  </p>
+                <div className="text-xs font-medium text-gray-400">
+                  {day.theme}
                 </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {day.activities.map((activity, index) => (
-                  <div key={index} className="border-l-4 border-blue-500 pl-4">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <p className="font-semibold">
+                  <div key={index} className="border-l-2 border-gray-700 pl-3">
+                    <div className="flex justify-between items-start gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-gray-200 text-sm">
                           {activity.time} - {activity.activity}
                         </p>
-                        <div className="flex items-center gap-2">
-                          <p className="text-sm text-gray-600">
+                        <div className="flex items-center gap-2 mt-1">
+                          <p className="text-xs text-gray-400 truncate">
                             {activity.location}
                           </p>
                           {activity.coordinates &&
@@ -179,74 +177,54 @@ const ItineraryDisplay = ({ content }) => {
                                     activity.coordinates
                                   )
                                 }
-                                className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
+                                className="text-gray-500 hover:text-gray-300 p-0.5 rounded transition-colors flex-shrink-0"
                                 title="View on map"
                               >
-                                <svg
-                                  className="w-4 h-4"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
+                                <MapPin className="w-3.5 h-3.5" />
                               </button>
                             )}
                         </div>
-                        {activity.coordinates &&
-                          activity.coordinates.lat &&
-                          activity.coordinates.lng && (
-                            <p className="text-xs text-gray-500 mt-1">
-                              📍 {activity.coordinates.lat.toFixed(4)},{" "}
-                              {activity.coordinates.lng.toFixed(4)}
-                            </p>
-                          )}
-                        <p className="text-sm text-gray-500">
+                        {activity.coordinates && (
+                          <p className="text-xs text-gray-600 mt-0.5">
+                            {activity.coordinates.lat.toFixed(4)},{" "}
+                            {activity.coordinates.lng.toFixed(4)}
+                          </p>
+                        )}
+                        <p className="text-xs text-gray-500 mt-1">
                           Duration: {activity.duration}
                         </p>
                         {activity.description && (
-                          <p className="text-sm mt-1">{activity.description}</p>
+                          <p className="text-xs mt-1 text-gray-500">
+                            {activity.description}
+                          </p>
                         )}
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900">
-                          ₹{activity.cost}
-                        </p>
+                      <div className="text-xs font-medium text-gray-400 flex-shrink-0">
+                        ₹{activity.cost}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-4 pt-4 border-t">
-                <p className="text-sm text-gray-500 text-right">
-                  Daily activities: {day.activities.length}
+              <div className="mt-3 pt-3 border-t border-gray-800">
+                <p className="text-xs text-gray-500 text-right">
+                  {day.activities.length} activities
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
 
-          <div className="bg-blue-50 p-4 rounded-lg mt-4">
-            <p className="text-center font-medium text-blue-900">
+          <div className="bg-gray-700 p-3 rounded-lg mt-2">
+            <p className="text-center text-sm font-medium text-gray-200">
               Total Estimated Cost: ₹{itinerary.total_estimated_cost}
             </p>
           </div>
         </div>
-
-        {/* Map Modal */}
-        <MapModal
-          isOpen={mapModal.isOpen}
-          onClose={closeMapModal}
-          location={mapModal.location}
-          coordinates={mapModal.coordinates}
-        />
       </div>
     );
   } catch (e) {
-    return <div className="text-red-500">Error displaying itinerary</div>;
+    return <div className="text-red-400 text-sm">Error displaying itinerary</div>;
   }
 };
 
@@ -258,6 +236,12 @@ export default function ChatPage() {
   const [conversationId, setConversationId] = useState(
     id ? parseInt(id) : null
   );
+  const [darkMode, setDarkMode] = useState(true);
+  const [mapModal, setMapModal] = useState({
+    isOpen: false,
+    location: "",
+    coordinates: null,
+  });
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -293,7 +277,6 @@ export default function ChatPage() {
     setNewMessage("");
     setLoading(true);
 
-    // Add user message to UI immediately
     const userMessage = {
       id: Date.now(),
       content: messageText,
@@ -318,7 +301,6 @@ export default function ChatPage() {
         setConversationId(conversation_id);
       }
 
-      // Add AI response to UI with special styling if query was rejected
       const aiMessage = {
         id: Date.now() + 1,
         content: aiResponse,
@@ -328,21 +310,16 @@ export default function ChatPage() {
       };
       setMessages((prev) => [...prev, aiMessage]);
 
-      // Show toast notification if query was rejected
       if (query_rejected) {
         showToast(
-          "⚠️ Query outside scope - Please ask travel-related questions",
+          "Query outside scope - Please ask travel-related questions",
           "warning"
         );
       }
     } catch (error) {
       console.error("Error sending message:", error);
-
-      // Show error toast
       const errorMsg = error.response?.data?.detail || "Failed to send message";
       showToast(errorMsg, "error");
-
-      // Remove the user message if there was an error
       setMessages((prev) => prev.slice(0, -1));
     } finally {
       setLoading(false);
@@ -351,15 +328,7 @@ export default function ChatPage() {
 
   const showToast = (message, type = "info") => {
     const toast = document.createElement("div");
-    toast.className = `fixed top-20 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform transition-all duration-300 ${
-      type === "success"
-        ? "bg-green-500"
-        : type === "error"
-        ? "bg-red-500"
-        : type === "warning"
-        ? "bg-yellow-500"
-        : "bg-blue-500"
-    }`;
+    toast.className = `fixed top-20 right-4 z-50 px-5 py-3 rounded-lg border text-sm bg-[#1a1a1a] border-gray-700 text-gray-200`;
     toast.textContent = message;
     document.body.appendChild(toast);
 
@@ -370,107 +339,170 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 h-screen flex flex-col">
-      <div className="bg-white rounded-lg shadow-lg flex-1 flex flex-col">
-        <div className="border-b p-4">
-          <h1 className="text-2xl font-bold text-gray-900">Travel Chat</h1>
-        </div>
+    <div className="h-screen flex flex-col bg-[#0a0a0a]">
+      <div className="max-w-5xl mx-auto px-4 py-6 h-full flex flex-col w-full">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-[#1a1a1a] backdrop-blur-xl rounded-lg border border-gray-800 flex-1 flex flex-col overflow-hidden"
+        >
+          {/* Header */}
+          <div className="border-b border-gray-800 px-6 py-4">
+            <h1 className="text-lg font-semibold text-gray-100">
+              AI Travel Assistant
+            </h1>
+            <p className="text-xs text-gray-500">
+              Get personalized travel recommendations
+            </p>
+          </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.length === 0 ? (
-            <div className="text-center text-gray-500 mt-8">
-              <div className="text-4xl mb-4">🤖</div>
-              <p>Start a conversation about your travel plans!</p>
-              <p className="text-sm mt-2">
-                Ask me anything about destinations, activities, or planning
-                tips.
-              </p>
-            </div>
-          ) : (
-            messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            {messages.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center mt-12"
               >
-                <div
-                  className={`max-w-full lg:max-w-3xl px-4 py-2 rounded-lg ${
-                    message.role === "user"
-                      ? "bg-blue-600 text-white"
-                      : message.rejected
-                      ? "bg-yellow-100 text-gray-800 border-2 border-yellow-400"
-                      : "bg-gray-200 text-gray-800"
-                  }`}
-                >
-                  {message.rejected && (
-                    <div className="flex items-center gap-2 mb-2 text-yellow-700 font-semibold text-sm">
-                      <span>⚠️</span>
-                      <span>Query Outside Scope</span>
-                    </div>
-                  )}
-                  {message.role === "assistant" &&
-                  isItineraryResponse(message.content) ? (
-                    <ItineraryDisplay content={message.content} />
-                  ) : (
-                    <div className="whitespace-pre-wrap">{message.content}</div>
-                  )}
-                  <div
-                    className={`text-xs mt-1 ${
-                      message.role === "user"
-                        ? "text-blue-100"
-                        : "text-gray-500"
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center">
+                  <span className="text-2xl">💬</span>
+                </div>
+                <h2 className="text-lg font-semibold text-gray-200 mb-2">
+                  Start Your Journey
+                </h2>
+                <p className="text-sm text-gray-500 mb-6">
+                  Ask me anything about destinations, activities, or planning
+                  tips
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto">
+                  {[
+                    "Plan a 3-day trip to Goa",
+                    "Best places to visit in Kerala",
+                    "Budget-friendly Delhi itinerary",
+                    "Adventure activities in Himachal",
+                  ].map((suggestion, i) => (
+                    <motion.button
+                      key={i}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => setNewMessage(suggestion)}
+                      className="bg-[#252525] p-3 rounded-lg border border-gray-800 hover:border-gray-700 transition-all text-left text-sm text-gray-300"
+                    >
+                      {suggestion}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            ) : (
+              <AnimatePresence>
+                {messages.map((message) => (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className={`flex ${
+                      message.role === "user" ? "justify-end" : "justify-start"
                     }`}
                   >
-                    {new Date(message.created_at).toLocaleTimeString()}
+                    <div
+                      className={`max-w-full lg:max-w-3xl px-5 py-3 rounded-lg text-sm ${
+                        message.role === "user"
+                          ? "bg-gray-700 text-gray-100"
+                          : message.rejected
+                          ? "bg-[#252525] border-2 border-gray-600"
+                          : "bg-[#252525] border border-gray-800"
+                      }`}
+                    >
+                      {message.rejected && (
+                        <div className="flex items-center gap-2 mb-2 text-gray-400 font-medium text-xs">
+                          <AlertTriangle className="w-3.5 h-3.5" />
+                          <span>Query Outside Scope</span>
+                        </div>
+                      )}
+                      {message.role === "assistant" &&
+                      isItineraryResponse(message.content) ? (
+                        <ItineraryDisplay
+                          content={message.content}
+                          darkMode={darkMode}
+                          openMapModal={(location, coordinates) =>
+                            setMapModal({ isOpen: true, location, coordinates })
+                          }
+                        />
+                      ) : (
+                        <div className="whitespace-pre-wrap text-gray-200">
+                          {message.content}
+                        </div>
+                      )}
+                      <div
+                        className={`text-xs mt-2 ${
+                          message.role === "user"
+                            ? "text-gray-400"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        {new Date(message.created_at).toLocaleTimeString()}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            )}
+            {loading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex justify-start"
+              >
+                <div className="bg-[#252525] border border-gray-800 px-5 py-3 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <Loader className="w-4 h-4 animate-spin text-gray-400" />
+                    <span className="text-sm text-gray-400">Thinking...</span>
                   </div>
                 </div>
-              </div>
-            ))
-          )}
-          {loading && (
-            <div className="flex justify-start">
-              <div className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-                <div className="flex items-center space-x-2">
-                  <div className="animate-pulse">Thinking...</div>
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div
-                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                      style={{ animationDelay: "0.1s" }}
-                    ></div>
-                    <div
-                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                      style={{ animationDelay: "0.2s" }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        <form onSubmit={handleSendMessage} className="border-t p-4">
-          <div className="flex space-x-4">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Ask about travel plans, destinations, or get recommendations..."
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={loading}
-            />
-            <button
-              type="submit"
-              disabled={loading || !newMessage.trim()}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-            >
-              Send
-            </button>
+              </motion.div>
+            )}
+            <div ref={messagesEndRef} />
           </div>
-        </form>
+
+          {/* Input */}
+          <form
+            onSubmit={handleSendMessage}
+            className="border-t border-gray-800 p-4"
+          >
+            <div className="flex gap-3">
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Ask about destinations, activities, or planning tips..."
+                className="flex-1 px-4 py-3 bg-[#252525] border border-gray-700 rounded-lg text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-gray-500 transition-colors"
+                disabled={loading}
+              />
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                type="submit"
+                disabled={loading || !newMessage.trim()}
+                className="bg-gray-700 text-gray-200 px-6 py-3 rounded-lg hover:bg-gray-600 disabled:opacity-50 font-medium transition-all flex items-center gap-2 text-sm"
+              >
+                <Send className="w-4 h-4" />
+                Send
+              </motion.button>
+            </div>
+          </form>
+        </motion.div>
       </div>
+
+      <MapModal
+        isOpen={mapModal.isOpen}
+        onClose={() =>
+          setMapModal({ isOpen: false, location: "", coordinates: null })
+        }
+        location={mapModal.location}
+        coordinates={mapModal.coordinates}
+        darkMode={darkMode}
+      />
     </div>
   );
 }

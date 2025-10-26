@@ -46,7 +46,6 @@ class GroupCreate(BaseModel):
 
 
 class GroupInvite(BaseModel):
-    group_id: int
     user_email: str
 
 

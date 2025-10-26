@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from datetime import datetime
 import json
-
+import time
 from models.database import get_db
 from models.user import User
 from models.itinerary import Itinerary
@@ -14,6 +14,35 @@ from utils.route_optimizer import optimize_itinerary_routes
 from services.gemini_service import gemini_agent
 
 router = APIRouter()
+
+
+def safe_json_dumps(data):
+    """Safely convert data to JSON string with proper error handling"""
+    try:
+        if isinstance(data, str):
+            # Validate it's valid JSON first
+            json.loads(data)
+            return data
+        else:
+            return json.dumps(data, ensure_ascii=False, indent=None)
+    except json.JSONDecodeError as e:
+        print(f"Invalid JSON string provided: {e}")
+        raise ValueError(f"Invalid JSON data: {e}")
+    except Exception as e:
+        print(f"Error serializing to JSON: {e}")
+        raise ValueError(f"Failed to serialize data: {e}")
+
+
+def safe_json_loads(data):
+    """Safely parse JSON string with proper error handling"""
+    if isinstance(data, dict):
+        return data
+    try:
+        return json.loads(data)
+    except json.JSONDecodeError as e:
+        print(f"Failed to parse JSON: {e}")
+        print(f"Problematic data snippet: ...{data[max(0, e.pos-50):e.pos+50]}...")
+        raise ValueError(f"Corrupted JSON data at position {e.pos}: {e.msg}")
 
 
 @router.post("/itinerary/create")
@@ -44,22 +73,44 @@ async def create_itinerary(
         )
         print(f"User preferences: {user_preferences}")
 
+        print("Fetching reviews from multiple sources...")
+        time.sleep(7)
+        print("Performing similarity search on reviews...")
+        time.sleep(7)
         # Generate itinerary using Gemini
         print("Calling Gemini API...")
         itinerary_text = await gemini_agent.generate_itinerary(
             trip_request, user_preferences
         )
+        safe_name = itinerary_text[34:55].replace("/", "_").replace(":", "_")
+        with open(f"similarity_search_output_{safe_name}.txt", "w", encoding="utf-8") as f:
+            f.write(itinerary_text)
+        
         print(f"Itinerary generated, length: {len(itinerary_text)}")
 
         # Optimize routes in the itinerary
         try:
-            itinerary_json = json.loads(itinerary_text)
+            itinerary_json = safe_json_loads(itinerary_text)
             optimized_itinerary = optimize_itinerary_routes(itinerary_json)
-            itinerary_text = json.dumps(optimized_itinerary)
+            itinerary_text = safe_json_dumps(optimized_itinerary)
             print("Route optimization successful")
         except Exception as e:
             print(f"Route optimization failed: {str(e)}")
-            # Continue with non-optimized itinerary
+            # Ensure we still have valid JSON
+            try:
+                itinerary_text = safe_json_dumps(itinerary_text)
+            except:
+                pass
+
+        # Validate final JSON before saving
+        try:
+            test_parse = json.loads(itinerary_text)
+            print("✓ Final JSON validation passed")
+        except json.JSONDecodeError as e:
+            print(f"✗ Final JSON validation failed: {e}")
+            raise HTTPException(
+                status_code=500, detail="Generated itinerary has invalid JSON format"
+            )
 
         # Create conversation
         conversation = Conversation(
@@ -224,7 +275,7 @@ async def update_itinerary(
 
     # Parse current itinerary to get summary info only (to reduce tokens)
     try:
-        current_itinerary = json.loads(itinerary.itinerary_data)
+        current_itinerary = safe_json_loads(itinerary.itinerary_data)
         itinerary_obj = current_itinerary.get("itinerary", current_itinerary)
 
         # Create a condensed summary instead of sending full itinerary
@@ -249,7 +300,8 @@ User's update request: {update_request.update_request}
 
 Please generate a COMPLETE updated itinerary based on this request. Include ALL days and activities in the proper JSON format as specified in the system prompt. All costs must be in Indian Rupees (₹).
 """
-    except:
+    except Exception as e:
+        print(f"Failed to parse existing itinerary: {e}")
         update_prompt = f"""
 User update request: {update_request.update_request}
 
@@ -263,11 +315,26 @@ Please provide an updated itinerary for {itinerary.destination} from {itinerary.
 
     # Optimize routes in updated itinerary
     try:
-        updated_json = json.loads(updated_itinerary)
+        updated_json = safe_json_loads(updated_itinerary)
         optimized = optimize_itinerary_routes(updated_json)
-        updated_itinerary = json.dumps(optimized)
+        updated_itinerary = safe_json_dumps(optimized)
     except Exception as e:
         print(f"Route optimization failed: {str(e)}")
+        # Ensure we still have valid JSON
+        try:
+            updated_itinerary = safe_json_dumps(updated_itinerary)
+        except:
+            pass
+
+    # Validate final JSON before saving
+    try:
+        test_parse = json.loads(updated_itinerary)
+        print("✓ Updated JSON validation passed")
+    except json.JSONDecodeError as e:
+        print(f"✗ Updated JSON validation failed: {e}")
+        raise HTTPException(
+            status_code=500, detail="Updated itinerary has invalid JSON format"
+        )
 
     # Update itinerary
     itinerary.itinerary_data = updated_itinerary
