@@ -156,7 +156,12 @@ Create a detailed travel itinerary for:
 - Budget: ₹{trip_request.budget} (Indian Rupees) (if provided)
 - Special requests: {trip_request.preferences}
 
-IMPORTANT: All costs MUST be in Indian Rupees (₹). Provide realistic Indian pricing for activities, food, accommodation, and transportation.
+IMPORTANT INSTRUCTIONS:
+1. All costs MUST be in Indian Rupees (₹). Provide realistic Indian pricing for activities, food, accommodation, and transportation.
+2. OPTIMIZE THE ROUTE: Arrange activities in each day to minimize travel distance and time. Consider geographical proximity when ordering activities.
+3. CHRONOLOGICAL TIMES: Ensure all activity times are in chronological order (e.g., 09:00, 10:30, 12:00, etc.). Never have a later activity before an earlier one.
+4. REALISTIC TIMING: Account for activity duration AND travel time between locations when setting times.
+5. LOGICAL FLOW: Avoid backtracking - group nearby locations together.
 
 Please provide a structured JSON itinerary following the format specified. Stricly do not return anything other than the JSON object not even any text before or after the JSON. DONT ADD '''json''' or any other text.
 """

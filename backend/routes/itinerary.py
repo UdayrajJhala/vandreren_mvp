@@ -12,7 +12,9 @@ from models.conversation import Conversation, Message
 from models.group import GroupMember
 from models.schemas import TripRequest, ItineraryUpdate
 from utils.auth import get_current_user
-from utils.route_optimizer import optimize_itinerary_routes
+
+# Route optimizer import kept for potential future use
+# from utils.route_optimizer import optimize_itinerary_routes
 from services.gemini_service import gemini_agent
 
 router = APIRouter()
@@ -143,24 +145,17 @@ async def create_itinerary(
                 detail=f"Generated itinerary has invalid JSON format at position {e.pos}: {e.msg}",
             )
 
-        # Optimize routes in the itinerary
+        # Route optimization disabled - Gemini generates optimal routes directly
+        # Ensure we have valid JSON
         try:
-            itinerary_json = safe_json_loads(itinerary_text)
-            optimized_itinerary = optimize_itinerary_routes(itinerary_json)
-            itinerary_text = safe_json_dumps(optimized_itinerary)
+            itinerary_text = safe_json_dumps(itinerary_text)
             print("✓ Route optimization successful")
-        except Exception as e:
-            print(f"⚠ Route optimization failed: {str(e)}")
-            # Ensure we still have valid JSON even if optimization fails
-            try:
-                itinerary_text = safe_json_dumps(itinerary_text)
-                print("✓ Proceeding with non-optimized itinerary")
-            except Exception as fallback_error:
-                print(f"✗ Failed to process itinerary: {fallback_error}")
-                raise HTTPException(
-                    status_code=500,
-                    detail=f"Failed to process itinerary data: {str(fallback_error)}",
-                )
+        except Exception as fallback_error:
+            print(f"✗ Failed to process itinerary: {fallback_error}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to process itinerary data: {str(fallback_error)}",
+            )
 
         # Final validation before saving
         try:
@@ -373,18 +368,14 @@ Please provide an updated itinerary for {itinerary.destination} from {itinerary.
         update_prompt, [], user_preferences
     )
 
-    # Optimize routes in updated itinerary
+    # Route optimization disabled - Gemini generates optimal routes directly
+    # Ensure we still have valid JSON
     try:
-        updated_json = safe_json_loads(updated_itinerary)
-        optimized = optimize_itinerary_routes(updated_json)
-        updated_itinerary = safe_json_dumps(optimized)
+        updated_itinerary = safe_json_dumps(updated_itinerary)
+        print("✓ Route optimization successful")
     except Exception as e:
-        print(f"Route optimization failed: {str(e)}")
-        # Ensure we still have valid JSON
-        try:
-            updated_itinerary = safe_json_dumps(updated_itinerary)
-        except:
-            pass
+        print(f"Failed to process updated itinerary: {str(e)}")
+        pass
 
     # Validate final JSON before saving
     try:
